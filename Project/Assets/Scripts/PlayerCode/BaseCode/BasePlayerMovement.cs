@@ -17,8 +17,10 @@ namespace PlayerCode.BaseCode {
         private Vector2 _moveInput;
         private bool _jumpButtonDown;
         private bool _attackKeyDown;
+        private bool _blockKeyDown;
 
         private float _holdAttackTime;
+        private float _holdHoldTime;
         //references
         protected Rigidbody rb;
 
@@ -60,9 +62,17 @@ namespace PlayerCode.BaseCode {
         }
 
         public void HandleAttackInput(InputAction.CallbackContext c) {
+            _attackKeyDown = c.performed;
             if (!c.performed) return;
 
             _holdAttackTime += Time.deltaTime;
+        }
+
+        public void HandleBlockInput(InputAction.CallbackContext c) { 
+            _blockKeyDown = c.performed;
+            if (!c.performed) return;
+
+            _holdHoldTime += Time.deltaTime;
         }
 
         #endregion
