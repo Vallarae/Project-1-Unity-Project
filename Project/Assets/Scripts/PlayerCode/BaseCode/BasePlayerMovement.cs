@@ -10,14 +10,15 @@ namespace PlayerCode.BaseCode {
         //default values that can be changed later
         public virtual float walkSpeed => 3f;
         public virtual float jumpHeight => 2f;
-        public LayerMask groundMask = 3; //change default to ground layer
+        public virtual float heavyAttackHoldTime => 0.75f;
+        public LayerMask groundMask = 3; //this is incorrect, change later to make convinient 
 
         //stores the player inputs into variables
         private Vector2 _moveInput;
         private bool _jumpButtonDown;
         private bool _attackKeyDown;
 
-        private bool _hasPunched;
+        private float _holdAttackTime;
         //references
         protected Rigidbody rb;
 
@@ -25,6 +26,7 @@ namespace PlayerCode.BaseCode {
 
         #region Unity Methods
 
+        //called at the start of the script
         private void Start() {
             rb = GetComponent<Rigidbody>();
 
@@ -32,12 +34,14 @@ namespace PlayerCode.BaseCode {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
+        //to ensure that the logic remains consistant among all frame rate
         private void FixedUpdate() {
             HandleMovement();
             HandleJump();
             CombatManager();
         }
 
+        //for debugging
         private void OnDrawGizmos() {
             Gizmos.color = isGrounded ? Color.green : Color.red;
             Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 1.2f);
@@ -53,6 +57,12 @@ namespace PlayerCode.BaseCode {
 
         public void HandleJumpInput(InputAction.CallbackContext c) {
             _jumpButtonDown = c.performed;
+        }
+
+        public void HandleAttackInput(InputAction.CallbackContext c) {
+            if (!c.performed) return;
+
+            _holdAttackTime += Time.deltaTime;
         }
 
         #endregion
@@ -74,9 +84,7 @@ namespace PlayerCode.BaseCode {
 
         #region Combat Methods
 
-        private void CombatManager() {
-            
-        }
+        private void CombatManager() { }
 
         protected virtual void LightAttack() { }
 
@@ -98,8 +106,7 @@ namespace PlayerCode.BaseCode {
 
         #region Check Methods
         protected bool isGrounded => Physics.Raycast(transform.position, Vector3.down, 1.2f, groundMask);
-
-        protected bool shouldPunch => !_hasPunched;
+        
         #endregion
     }
 }
