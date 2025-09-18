@@ -8,10 +8,20 @@ namespace PlayerCode.BaseCode {
         #region Variables
 
         //default values that can be changed later
-        public virtual float walkSpeed => 3f;
-        public virtual float jumpHeight => 2f;
-        public virtual float heavyAttackHoldTime => 0.75f;
-        public LayerMask groundMask = 3; //this is incorrect, change later to make convinient 
+        protected virtual float walkSpeed => 3f;
+        protected virtual float jumpHeight => 2f;
+        protected virtual int health => 100;
+        protected virtual int damage => 3;
+        protected virtual float heavyAttackHoldTime => 0.75f;
+        protected virtual float lightAttackStunDuration => 0.25f;
+        protected virtual float heavyAttackStunDuration => 0.75f;
+        protected virtual float lightAttackKnockbackForce => 3f;
+        protected virtual float heavyAttackKnockbackForce => 5f;
+        protected virtual float maxBlockHoldTime => 2f;
+        protected virtual float blockCooldown => 3;
+        protected virtual float blockAfterAttackCooldown => 0.2f;
+        
+        protected LayerMask groundMask = 3; //this is incorrect, change later to make convinient 
 
         //stores the player inputs into variables
         private Vector2 _moveInput;
@@ -96,21 +106,17 @@ namespace PlayerCode.BaseCode {
 
         private void CombatManager() { }
 
-        protected virtual void LightAttack() { }
-
-        protected virtual void HeavyAttack() { }
-
-        protected virtual void ArialAttack() { }
-
-        protected virtual void UpwardsAttack() { }
-
-        protected virtual void DownwardsAttack() { }
+        protected virtual void Attack() { }
 
         protected virtual void Block() { }
         
         protected virtual void Ability() { }
         
         protected virtual void Ultimate() { }
+        
+        protected virtual void Knockback(float knockbackForce) { }
+
+        protected virtual void Damage(int inDamage) { }
 
         #endregion
 
