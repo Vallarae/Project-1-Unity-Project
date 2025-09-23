@@ -12,9 +12,6 @@ namespace PlayerCode.BaseCode {
         //default values that can be changed later
         protected virtual float walkSpeed => 3f;
         protected virtual float jumpHeight => 2f;
-        protected virtual int maxHealth => 100;
-        protected virtual int lightAttackDamage => 3;
-        protected virtual int heavyAttackDamage => 5;
         protected virtual float lightAttackCooldownDuration => 0.25f;
         protected virtual float heavyAttackCooldownDuration => 0.5f;
         protected virtual float heavyAttackHoldTime => 0.5f;
@@ -26,6 +23,9 @@ namespace PlayerCode.BaseCode {
         protected virtual float blockCooldown => 3;
         protected virtual float blockAfterAttackCooldown => 0.2f;
         protected virtual float ultimateCooldownDuration => 100f;
+        protected virtual int maxHealth => 100;
+        protected virtual int lightAttackDamage => 3;
+        protected virtual int heavyAttackDamage => 5;
         protected bool canUseAbility = false;
 
         protected LayerMask groundMask;
@@ -33,12 +33,12 @@ namespace PlayerCode.BaseCode {
         //stores the player inputs into variables
         private Vector2 _moveInput;
         private bool _jumpButtonDown;
-        [SerializeField] private bool _attackKeyDown;
+        private bool _attackKeyDown;
         private bool _blockKeyDown;
         private bool _abilityKeyDown;
         private bool _ultimateKeyDown;
 
-        [SerializeField] private float _holdAttackTime;
+        private float _holdAttackTime;
         private float _holdBlockTime;
         //references
         protected Rigidbody rb;
@@ -49,7 +49,7 @@ namespace PlayerCode.BaseCode {
         //cooldown handling
         private float _attackCooldown;
         private float _blockCooldown;
-        [SerializeField] private float _stunDuration;
+        private float _stunDuration;
         private float _ultimateCooldown;
 
         //other variables
@@ -179,11 +179,9 @@ namespace PlayerCode.BaseCode {
             Stun(0.25f);
             _holdAttackTime = 0f;
 
-            //prehaps move this into a different function?
             BasePlayerController otherFighter = Hitbox();
 
             if (otherFighter == null) return;
-            // ^
 
             if (isLightAttack && otherFighter.isBlocking) return;
 
