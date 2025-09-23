@@ -12,12 +12,12 @@ namespace PlayerCode.BaseCode {
         //default values that can be changed later
         protected virtual float walkSpeed => 3f;
         protected virtual float jumpHeight => 2f;
-        protected virtual int health => 100;
+        protected virtual int maxHealth => 100;
         protected virtual int lightAttackDamage => 3;
         protected virtual int heavyAttackDamage => 5;
         protected virtual float lightAttackCooldownDuration => 0.25f;
         protected virtual float heavyAttackCooldownDuration => 0.5f;
-        protected virtual float heavyAttackHoldTime => 0.75f;
+        protected virtual float heavyAttackHoldTime => 0.5f;
         protected virtual float lightAttackStunDuration => 0.25f;
         protected virtual float heavyAttackStunDuration => 0.75f;
         protected virtual float lightAttackKnockbackForce => 3f;
@@ -26,19 +26,19 @@ namespace PlayerCode.BaseCode {
         protected virtual float blockCooldown => 3;
         protected virtual float blockAfterAttackCooldown => 0.2f;
         protected virtual float ultimateCooldownDuration => 100f;
-        protected virtual bool canUseAbility => false;
+        protected bool canUseAbility = false;
 
         protected LayerMask groundMask;
 
         //stores the player inputs into variables
         private Vector2 _moveInput;
         private bool _jumpButtonDown;
-        private bool _attackKeyDown;
+        [SerializeField] private bool _attackKeyDown;
         private bool _blockKeyDown;
         private bool _abilityKeyDown;
         private bool _ultimateKeyDown;
 
-        private float _holdAttackTime;
+        [SerializeField] private float _holdAttackTime;
         private float _holdBlockTime;
         //references
         protected Rigidbody rb;
@@ -51,6 +51,9 @@ namespace PlayerCode.BaseCode {
         private float _blockCooldown;
         [SerializeField] private float _stunDuration;
         private float _ultimateCooldown;
+
+        //other variables
+        private int _currentHealth;
 
         #endregion
 
@@ -65,6 +68,7 @@ namespace PlayerCode.BaseCode {
             groundMask = LayerMask.GetMask("Ground");
 
             _ultimateCooldown = ultimateCooldownDuration;
+            _currentHealth = maxHealth;
 
             PlayerLookupMap.AddPlayer(GetComponent<Collider>(), this);
         }
@@ -74,10 +78,12 @@ namespace PlayerCode.BaseCode {
         }
 
         //to ensure that the logic remains consistant among all frame rate
-        private void FixedUpdate(){
+        private void FixedUpdate() {
             if (_stunDuration > 0) return;
-            HandleMovement();
-            HandleJump();
+            if (!isBlocking) {
+                HandleMovement();
+                HandleJump();
+            }
             CombatManager();
         }
 
@@ -110,12 +116,9 @@ namespace PlayerCode.BaseCode {
 
         public void HandleAttackInput(InputAction.CallbackContext c) {
             _attackKeyDown = c.performed;
-            if (!c.performed) return;
-
-            _holdAttackTime += Time.deltaTime;
         }
 
-        public void HandleBlockInput(InputAction.CallbackContext c) { 
+        public void HandleBlockInput(InputAction.CallbackContext c) {
             _blockKeyDown = c.performed;
             if (!c.performed) return;
 
@@ -149,7 +152,7 @@ namespace PlayerCode.BaseCode {
 
         #region Combat Methods
 
-        protected virtual void CombatManager() { 
+        protected virtual void CombatManager() {
             if (_ultimateKeyDown && _ultimateCooldown < 0) {
                 Ultimate();
                 return;
@@ -172,24 +175,15 @@ namespace PlayerCode.BaseCode {
         }
 
         protected virtual void Attack() {
-            bool isLightAttack = _holdAttackTime > heavyAttackHoldTime;
-            _holdAttackTime = 0;
+            bool isLightAttack = _holdAttackTime < heavyAttackHoldTime;
             Stun(0.25f);
+            _holdAttackTime = 0f;
 
-            //get other fighter
-            Collider[] collidersInRange = Physics.OverlapBox(transform.position, new Vector3(3, 3, 3) / 2);
-            BasePlayerController otherFighter = null;
-            foreach (Collider collider in collidersInRange) {
-                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
-                if (controllerToCheck == null) continue;
-
-                if (controllerToCheck == this) continue;
-
-                otherFighter = controllerToCheck;
-                break;
-            }
+            //prehaps move this into a different function?
+            BasePlayerController otherFighter = Hitbox();
 
             if (otherFighter == null) return;
+            // ^
 
             if (isLightAttack && otherFighter.isBlocking) return;
 
@@ -197,32 +191,71 @@ namespace PlayerCode.BaseCode {
             float finalKnockback = isLightAttack ? lightAttackKnockbackForce : heavyAttackKnockbackForce;
             float finalStunDuration = isLightAttack ? lightAttackStunDuration : heavyAttackStunDuration;
 
+            Vector3 direction = otherFighter.gameObject.transform.position - transform.position;
+            direction.Normalize();
+            direction.z = 0;
+
             otherFighter.Damage(finalDamage);
-            otherFighter.Knockback(finalKnockback);
+            otherFighter.Knockback(direction, finalKnockback);
             otherFighter.Stun(finalStunDuration);
+            if (!isLightAttack && otherFighter.isBlocking) otherFighter.DisableBlock(finalStunDuration + 0.25f);
+        }
+
+        protected BasePlayerController Hitbox() {
+            Collider[] collidersInRange = Physics.OverlapBox(transform.position, new Vector3(3, 3, 3) / 2);
+            BasePlayerController otherFighter = null;
+            foreach (Collider collider in collidersInRange)
+            {
+                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
+                if (controllerToCheck == null) continue;
+                if (controllerToCheck == this) continue;
+
+                otherFighter = controllerToCheck;
+                break;
+            }
+
+            return otherFighter;
         }
 
         protected virtual void Block() {
-            Debug.Log("Block");
+            if (_holdBlockTime >= maxBlockHoldTime) {
+                isBlocking = false;
+                _blockCooldown = blockCooldown;
+                return;
+            }
+
+            isBlocking = true;
         }
-        
+
+        //These two functions can be left empty, as they will be unique per player
         protected virtual void Ability() {
             Debug.Log("Ability");
         }
-        
+
         protected virtual void Ultimate() {
             Debug.Log("Ultimate");
         }
-        
-        protected virtual void Knockback(float knockbackForce) { 
-            rb.AddForce(Vector3.right * knockbackForce, ForceMode.Impulse);
+
+        protected virtual void Knockback(Vector3 direction, float knockbackForce) {
+            rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
             Debug.Log(this.gameObject.name + " has taken knockback");
         }
 
-        protected virtual void Damage(int inDamage) { }
+        protected virtual void Damage(int inDamage) {
+            _currentHealth -= inDamage;
 
-        protected virtual void Stun(float duration) { 
+            if (_currentHealth <= 0) {
+                Destroy(this.gameObject);
+            }
+        }
+
+        protected virtual void Stun(float duration) {
             _stunDuration = duration;
+        }
+
+        protected virtual void DisableBlock(float duration) {
+            _blockCooldown = duration;
+            isBlocking = false;
         }
 
         #endregion
@@ -241,6 +274,8 @@ namespace PlayerCode.BaseCode {
             _blockCooldown -= Time.deltaTime;
             _stunDuration -= Time.deltaTime;
             _ultimateCooldown -= Time.deltaTime;
+
+            if (_attackKeyDown) _holdAttackTime += Time.deltaTime;
         }
 
         #endregion

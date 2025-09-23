@@ -392,6 +392,7 @@ GameObject:
   - component: {fileID: 491024894}
   - component: {fileID: 491024893}
   - component: {fileID: 491024892}
+  - component: {fileID: 491024899}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Untagged
@@ -583,6 +584,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c7dc85769e9450985a02449a6e734e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackKeyDown: 0
+  _holdAttackTime: 0
   isBlocking: 0
   _stunDuration: 0
 --- !u!54 &491024894
@@ -703,6 +706,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!75 &491024899
+ConstantForce:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 491024891}
+  m_Enabled: 1
+  m_Force: {x: 0, y: -15, z: 0}
+  m_RelativeForce: {x: 0, y: 0, z: 0}
+  m_Torque: {x: 0, y: 0, z: 0}
+  m_RelativeTorque: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,7 +1199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b9ed207c809a441bc1b9a174b39227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBlocking: 0
+  _attackKeyDown: 0
+  _holdAttackTime: 0
+  isBlocking: 1
   _stunDuration: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
