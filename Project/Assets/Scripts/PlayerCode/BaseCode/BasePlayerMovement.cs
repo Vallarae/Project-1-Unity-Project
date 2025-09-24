@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +12,7 @@ namespace PlayerCode.BaseCode {
         protected virtual float jumpHeight => 2f;
         protected virtual float lightAttackCooldownDuration => 0.25f;
         protected virtual float heavyAttackCooldownDuration => 0.5f;
-        protected virtual float heavyAttackHoldTime => 0.5f;
+        protected virtual float heavyAttackHoldTime => 0.3f;
         protected virtual float lightAttackStunDuration => 0.25f;
         protected virtual float heavyAttackStunDuration => 0.75f;
         protected virtual float lightAttackKnockbackForce => 3f;
@@ -39,7 +37,7 @@ namespace PlayerCode.BaseCode {
         private bool _ultimateKeyDown;
 
         private float _holdAttackTime;
-        private float _holdBlockTime;
+        [SerializeField] private float _holdBlockTime;
         //references
         protected Rigidbody rb;
 
@@ -48,18 +46,18 @@ namespace PlayerCode.BaseCode {
 
         //cooldown handling
         private float _attackCooldown;
-        private float _blockCooldown;
+        [SerializeField] private float _blockCooldown;
         private float _stunDuration;
         private float _ultimateCooldown;
 
         //other variables
         private int _currentHealth;
+        private CombatState _state = CombatState.Normal;
 
         #endregion
 
         #region Unity Methods
 
-        //called at the start of the script
         private void Start() {
             rb = GetComponent<Rigidbody>();
 
@@ -77,7 +75,6 @@ namespace PlayerCode.BaseCode {
             HandleCooldowns();
         }
 
-        //to ensure that the logic remains consistant among all frame rate
         private void FixedUpdate() {
             if (_stunDuration > 0) return;
             if (!isBlocking) {
@@ -87,15 +84,33 @@ namespace PlayerCode.BaseCode {
             CombatManager();
         }
 
-        //for debugging
         private void OnDrawGizmos() {
             Gizmos.color = isGrounded ? Color.green : Color.red;
             Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 1.2f);
 
-            //Collider[] collidersInRange = Physics.OverlapBox(transform.position, new Vector3(3, 3, 3));
-
-            Gizmos.color = Color.red;
+            BasePlayerController otherPlayer = Hitbox();
+            Gizmos.color = otherPlayer == null ? Color.red : Color.green;
             Gizmos.DrawWireCube(transform.position, new Vector3(3, 3, 3));
+
+            switch (_state) {
+                case CombatState.Normal:
+                    Gizmos.color = Color.blue;
+                    break;
+                case CombatState.Attacking:
+                    Gizmos.color = Color.magenta;
+                    break;
+                case CombatState.Blocking:
+                    Gizmos.color = Color.green;
+                    break;
+                case CombatState.Ability:
+                    Gizmos.color = Color.red;
+                    break;
+                case CombatState.Ultimate:
+                    Gizmos.color = Color.yellow;
+                    break;
+            }
+
+            Gizmos.DrawCube(transform.position, new Vector3(1, 1, 1));
         }
 
         private void OnDestroy() {
@@ -120,9 +135,6 @@ namespace PlayerCode.BaseCode {
 
         public void HandleBlockInput(InputAction.CallbackContext c) {
             _blockKeyDown = c.performed;
-            if (!c.performed) return;
-
-            _holdBlockTime += Time.deltaTime;
         }
 
         public void HandleAbilityInput(InputAction.CallbackContext c) {
@@ -155,23 +167,31 @@ namespace PlayerCode.BaseCode {
         protected virtual void CombatManager() {
             if (_ultimateKeyDown && _ultimateCooldown < 0) {
                 Ultimate();
+                _state = CombatState.Ultimate;
                 return;
             }
 
             if (_abilityKeyDown && canUseAbility) {
                 Ability();
+                _state = CombatState.Ability;
                 return;
             }
 
             if (canBlock) {
                 Block();
+                _state = CombatState.Blocking;
                 return;
+            } else {
+                isBlocking = false;
             }
 
             if (canAttack) {
                 Attack();
+                _state = CombatState.Attacking;
                 return;
             }
+
+            _state = CombatState.Normal;
         }
 
         protected virtual void Attack() {
@@ -182,28 +202,37 @@ namespace PlayerCode.BaseCode {
             BasePlayerController otherFighter = Hitbox();
 
             if (otherFighter == null) return;
-
             if (isLightAttack && otherFighter.isBlocking) return;
 
-            int finalDamage = isLightAttack ? lightAttackDamage : heavyAttackDamage;
-            float finalKnockback = isLightAttack ? lightAttackKnockbackForce : heavyAttackKnockbackForce;
-            float finalStunDuration = isLightAttack ? lightAttackStunDuration : heavyAttackStunDuration;
+            int finalDamage = isLightAttack ? 
+                lightAttackDamage : heavyAttackDamage;
+            float finalKnockback = isLightAttack ? 
+                lightAttackKnockbackForce : heavyAttackKnockbackForce;
+            float finalStunDuration = isLightAttack ? 
+                lightAttackStunDuration : heavyAttackStunDuration;
 
-            Vector3 direction = otherFighter.gameObject.transform.position - transform.position;
+            float finalAttackCooldown = isLightAttack ?
+                lightAttackCooldownDuration : heavyAttackCooldownDuration;
+
+            Vector3 direction = 
+                otherFighter.gameObject.transform.position
+                - transform.position;
             direction.Normalize();
             direction.z = 0;
+
+            _attackCooldown = finalAttackCooldown;
 
             otherFighter.Damage(finalDamage);
             otherFighter.Knockback(direction, finalKnockback);
             otherFighter.Stun(finalStunDuration);
-            if (!isLightAttack && otherFighter.isBlocking) otherFighter.DisableBlock(finalStunDuration + 0.25f);
+            if (!isLightAttack && otherFighter.isBlocking) 
+                otherFighter.DisableBlock(finalStunDuration + 0.25f);
         }
 
         protected BasePlayerController Hitbox() {
             Collider[] collidersInRange = Physics.OverlapBox(transform.position, new Vector3(3, 3, 3) / 2);
             BasePlayerController otherFighter = null;
-            foreach (Collider collider in collidersInRange)
-            {
+            foreach (Collider collider in collidersInRange) {
                 BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
                 if (controllerToCheck == null) continue;
                 if (controllerToCheck == this) continue;
@@ -274,8 +303,18 @@ namespace PlayerCode.BaseCode {
             _ultimateCooldown -= Time.deltaTime;
 
             if (_attackKeyDown) _holdAttackTime += Time.deltaTime;
+            if (_blockKeyDown) _holdBlockTime += Time.deltaTime;
+            else _holdBlockTime = 0;
         }
 
         #endregion
     }
+}
+
+public enum CombatState {
+    Normal,
+    Ultimate,
+    Ability,
+    Blocking,
+    Attacking
 }

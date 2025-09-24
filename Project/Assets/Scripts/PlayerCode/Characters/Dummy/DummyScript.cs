@@ -2,7 +2,6 @@ using PlayerCode.BaseCode;
 using UnityEngine;
 
 public class DummyScript : BasePlayerController {
-
     protected override void HandleMovement() { 
         
     }
