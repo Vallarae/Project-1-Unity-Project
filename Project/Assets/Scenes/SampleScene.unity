@@ -584,10 +584,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c7dc85769e9450985a02449a6e734e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackKeyDown: 0
-  _holdAttackTime: 0
-  isBlocking: 0
-  _stunDuration: 0
+  walkSpeed: 3
+  jumpHeight: 2
+  lightAttackDamage: 3
+  lightAttackStunDuration: 0.25
+  lightAttackKnockbackForce: 3
+  lightAttackCooldownDuration: 0.25
+  lightAttackSound: {fileID: 0}
+  heavyAttackDamage: 5
+  heavyAttackHoldTime: 0.3
+  heavyAttackStunDuration: 0.75
+  heavyAttackKnockbackForce: 5
+  heavyAttackCooldownDuration: 0.5
+  heavyAttackSound: {fileID: 0}
+  blockCooldown: 3
+  maxBlockHoldTime: 2
+  blockAfterAttackCooldown: 0.2
+  blockSound: {fileID: 0}
+  maxHealth: 100
+  takeDamageSound: {fileID: 0}
+  ultimateCooldownDuration: 100
 --- !u!54 &491024894
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1199,10 +1215,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b9ed207c809a441bc1b9a174b39227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackKeyDown: 0
-  _holdAttackTime: 0
-  isBlocking: 1
-  _stunDuration: 0
+  walkSpeed: 3
+  jumpHeight: 2
+  lightAttackDamage: 3
+  lightAttackStunDuration: 0.25
+  lightAttackKnockbackForce: 3
+  lightAttackCooldownDuration: 0.25
+  lightAttackSound: {fileID: 0}
+  heavyAttackDamage: 5
+  heavyAttackHoldTime: 0.3
+  heavyAttackStunDuration: 0.75
+  heavyAttackKnockbackForce: 5
+  heavyAttackCooldownDuration: 0.5
+  heavyAttackSound: {fileID: 0}
+  blockCooldown: 3
+  maxBlockHoldTime: 2
+  blockAfterAttackCooldown: 0.2
+  blockSound: {fileID: 0}
+  maxHealth: 100
+  takeDamageSound: {fileID: 0}
+  ultimateCooldownDuration: 100
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
