@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,26 +8,41 @@ namespace PlayerCode.BaseCode {
     public abstract class BasePlayerController : MonoBehaviour {
         #region Variables
 
-        //default values that can be changed later
-        protected virtual float walkSpeed => 3f;
-        protected virtual float jumpHeight => 2f;
-        protected virtual float lightAttackCooldownDuration => 0.25f;
-        protected virtual float heavyAttackCooldownDuration => 0.5f;
-        protected virtual float heavyAttackHoldTime => 0.3f;
-        protected virtual float lightAttackStunDuration => 0.25f;
-        protected virtual float heavyAttackStunDuration => 0.75f;
-        protected virtual float lightAttackKnockbackForce => 3f;
-        protected virtual float heavyAttackKnockbackForce => 5f;
-        protected virtual float maxBlockHoldTime => 2f;
-        protected virtual float blockCooldown => 3;
-        protected virtual float blockAfterAttackCooldown => 0.2f;
-        protected virtual float ultimateCooldownDuration => 100f;
-        protected virtual int maxHealth => 100;
-        protected virtual int lightAttackDamage => 3;
-        protected virtual int heavyAttackDamage => 5;
-        protected bool canUseAbility = false;
-
+        [Header("Movement Settings")]
+        [SerializeField] protected float walkSpeed = 3f;
+        [SerializeField] protected float jumpHeight = 2f;
         protected LayerMask groundMask;
+
+        [Space]
+        [Header("Light Attacks Settings")]
+        [SerializeField] protected int lightAttackDamage = 3;
+        [SerializeField] protected float lightAttackStunDuration = 0.25f;
+        [SerializeField] protected float lightAttackKnockbackForce = 3f;
+        [SerializeField] protected float lightAttackCooldownDuration = 0.25f;
+
+        [Space]
+        [Header("Heavy Attacks Settings")]
+        [SerializeField] protected int heavyAttackDamage = 5;
+        [SerializeField] protected float heavyAttackHoldTime = 0.3f;
+        [SerializeField] protected float heavyAttackStunDuration = 0.75f;
+        [SerializeField] protected float heavyAttackKnockbackForce = 5f;
+        [SerializeField] protected float heavyAttackCooldownDuration = 0.5f;
+
+        [Space]
+        [Header("Block Settings")]
+        [SerializeField] protected float blockCooldown = 3;
+        [SerializeField] protected float maxBlockHoldTime = 2f;
+        [SerializeField] protected float blockAfterAttackCooldown = 0.2f;
+
+        [Space]
+        [Header("Health Settings")]
+        [SerializeField] protected int maxHealth = 100;
+
+        [Space]
+        [Header("Ultimate Settings")]
+        [SerializeField] protected float ultimateCooldownDuration = 100f;
+
+        [NonSerialized] public bool canUseAbility = false;
 
         //stores the player inputs into variables
         private Vector2 _moveInput;
@@ -37,16 +53,16 @@ namespace PlayerCode.BaseCode {
         private bool _ultimateKeyDown;
 
         private float _holdAttackTime;
-        [SerializeField] private float _holdBlockTime;
+        private float _holdBlockTime;
         //references
         protected Rigidbody rb;
 
         //for other scripts
-        public bool isBlocking = false;
+        [NonSerialized] public bool isBlocking = false;
 
         //cooldown handling
         private float _attackCooldown;
-        [SerializeField] private float _blockCooldown;
+        private float _blockCooldown;
         private float _stunDuration;
         private float _ultimateCooldown;
 
