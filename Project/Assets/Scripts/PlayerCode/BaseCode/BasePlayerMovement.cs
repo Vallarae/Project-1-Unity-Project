@@ -8,6 +8,7 @@ namespace PlayerCode.BaseCode
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(PlayerInput))]
+    [RequireComponent(typeof(AudioSource))]
     public abstract class BasePlayerController : MonoBehaviour
     {
         #region Variables
@@ -23,6 +24,7 @@ namespace PlayerCode.BaseCode
         [SerializeField] protected float lightAttackStunDuration = 0.25f;
         [SerializeField] protected float lightAttackKnockbackForce = 3f;
         [SerializeField] protected float lightAttackCooldownDuration = 0.25f;
+        [SerializeField] protected AudioClip lightAttackSound;
 
         [Space]
         [Header("Heavy Attacks Settings")]
@@ -31,16 +33,19 @@ namespace PlayerCode.BaseCode
         [SerializeField] protected float heavyAttackStunDuration = 0.75f;
         [SerializeField] protected float heavyAttackKnockbackForce = 5f;
         [SerializeField] protected float heavyAttackCooldownDuration = 0.5f;
+        [SerializeField] protected AudioClip heavyAttackSound;
 
         [Space]
         [Header("Block Settings")]
         [SerializeField] protected float blockCooldown = 3;
         [SerializeField] protected float maxBlockHoldTime = 2f;
         [SerializeField] protected float blockAfterAttackCooldown = 0.2f;
+        [SerializeField] protected AudioClip blockSound;
 
         [Space]
         [Header("Health Settings")]
         [SerializeField] protected int maxHealth = 100;
+        [SerializeField] protected AudioClip takeDamageSound;
 
         [Space]
         [Header("Ultimate Settings")]
@@ -60,6 +65,7 @@ namespace PlayerCode.BaseCode
         private float _holdBlockTime;
         //references
         protected Rigidbody rb;
+        protected AudioSource audioSource;
 
         //for other scripts
         [NonSerialized] public bool isBlocking = false;
@@ -81,6 +87,7 @@ namespace PlayerCode.BaseCode
         private void Start()
         {
             rb = GetComponent<Rigidbody>();
+            audioSource = GetComponent<AudioSource>();
 
             rb.constraints = RigidbodyConstraints.FreezePositionZ;
             rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -241,12 +248,18 @@ namespace PlayerCode.BaseCode
             bool isLightAttack = _holdAttackTime < heavyAttackHoldTime;
             _holdAttackTime = 0f;
 
+            audioSource.PlayOneShot(isLightAttack ? lightAttackSound : heavyAttackSound);
+
             Stun(0.25f);
 
             BasePlayerController target = Hitbox();
             if (target == null) return;
 
-            if (isLightAttack && target.isBlocking) return;
+            if (isLightAttack && target.isBlocking)
+            {
+                target.audioSource.PlayOneShot(target.blockSound);
+                return;
+            }
 
             AttackData data = GetAttackData(isLightAttack);
 
@@ -264,6 +277,8 @@ namespace PlayerCode.BaseCode
 
         private void ApplyAttack(BasePlayerController target, AttackData data)
         {
+            target.audioSource.PlayOneShot(target.takeDamageSound);
+
             Vector3 direction =
                 target.gameObject.transform.position
                 - transform.position;
