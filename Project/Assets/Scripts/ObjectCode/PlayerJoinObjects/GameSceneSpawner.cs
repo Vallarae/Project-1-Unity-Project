@@ -1,3 +1,4 @@
+using PlayerCode.BaseCode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,8 +12,8 @@ public class GameSceneSpawner : MonoBehaviour
         {
             var obj = Instantiate(defaultPlayer, transform.position, Quaternion.identity);
 
-            var input = obj.GetComponent<PlayerInput>();
-            input.SwitchCurrentControlScheme(player.controlScheme, player.device);
+            BasePlayerController _playerController = obj.GetComponent<BasePlayerController>();
+            _playerController.device = player.device;
         }
     }
 }

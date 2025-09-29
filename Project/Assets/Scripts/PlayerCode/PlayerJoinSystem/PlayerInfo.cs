@@ -1,4 +1,5 @@
 using UnityEngine.InputSystem;
+using UnityEngine.iOS;
 
 [System.Serializable]
 public class PlayerInfo

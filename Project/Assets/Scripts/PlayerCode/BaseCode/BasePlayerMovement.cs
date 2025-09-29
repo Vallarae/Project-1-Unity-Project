@@ -2,12 +2,13 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Device;
 using UnityEngine.UIElements;
 
 namespace PlayerCode.BaseCode
 {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(PlayerInput))]
+    [RequireComponent(typeof(PlayerInputHandler))]
     [RequireComponent(typeof(AudioSource))]
     public abstract class BasePlayerController : MonoBehaviour
     {
@@ -52,9 +53,10 @@ namespace PlayerCode.BaseCode
         [SerializeField] protected float ultimateCooldownDuration = 100f;
 
         [NonSerialized] public bool canUseAbility = false;
+        [NonSerialized] public InputDevice device;
 
         //stores the player inputs into variables
-        private Vector2 _moveInput;
+        [SerializeField] private Vector2 _moveInput;
         private bool _jumpButtonDown;
         private bool _attackKeyDown;
         private bool _blockKeyDown;
@@ -155,34 +157,74 @@ namespace PlayerCode.BaseCode
 
         #region Input Methods
 
-        public void MoveInput(InputAction.CallbackContext c)
+        public void HandleMoveInput(InputAction.CallbackContext c)
         {
+            if (c.control.device != device) return;
             _moveInput = c.ReadValue<Vector2>();
         }
 
-        public void HandleJumpInput(InputAction.CallbackContext c)
+        public void HandleMoveInputEnd(InputAction.CallbackContext c)
         {
-            _jumpButtonDown = c.performed;
+            if (c.control.device != device) return;
+            _moveInput = Vector3.zero;
         }
 
-        public void HandleAttackInput(InputAction.CallbackContext c)
+        public void HandleJumpPressed(InputAction.CallbackContext c)
         {
-            _attackKeyDown = c.performed;
+            if (c.control.device != device) return;
+            _jumpButtonDown = true;
         }
 
-        public void HandleBlockInput(InputAction.CallbackContext c)
+        public void HandleJumpRelease(InputAction.CallbackContext c)
         {
-            _blockKeyDown = c.performed;
+            if (c.control.device != device) return;
+            _jumpButtonDown = false;
         }
 
-        public void HandleAbilityInput(InputAction.CallbackContext c)
+        public void HandleAttackPressed(InputAction.CallbackContext c)
         {
-            _abilityKeyDown = c.performed;
+            if (c.control.device != device) return;
+            _attackKeyDown = true;
         }
 
-        public void HandleUltimateInput(InputAction.CallbackContext c)
+        public void HandleAttackReleased(InputAction.CallbackContext c)
         {
-            _ultimateKeyDown = c.performed;
+            if (c.control.device != device) return;
+            _attackKeyDown = false;
+        }
+
+        public void HandleBlockPressed(InputAction.CallbackContext c)
+        {
+            if (c.control.device != device) return;
+            _blockKeyDown = true;
+        }
+
+        public void HandleBlockReleased(InputAction.CallbackContext c)
+        {
+            if (c.control.device != device) return;
+            _blockKeyDown = false;
+        }
+
+        public void HandleAbilityPressed(InputAction.CallbackContext c)
+        {
+            if (c.control.device != device) return;
+            _abilityKeyDown = true;
+        }
+        public void HandleAbilityRelease(InputAction.CallbackContext c)
+        {
+            if (c.control.device != device) return;
+            _abilityKeyDown = false;
+        }
+
+        public void HandleUltimatePressed(InputAction.CallbackContext c)
+        {
+            if (c.control.device != device) return;
+            _ultimateKeyDown = true;
+        }
+        public void HandleUltimateRelease(InputAction.CallbackContext c)
+        {
+            if (c.control.device != device) return;
+            _ultimateKeyDown = false;
         }
 
         #endregion
