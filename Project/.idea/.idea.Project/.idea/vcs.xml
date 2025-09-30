@@ -4,8 +4,5 @@
     <mapping directory="$USER_HOME$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../../CustomItemSystem" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
-    <mapping directory="$USER_HOME$/paperweight" vcs="Git" />
-    <mapping directory="$USER_HOME$/paperweight-test-plugin" vcs="Git" />
-    <mapping directory="$USER_HOME$/scoop/buckets/extras" vcs="Git" />
   </component>
 </project>

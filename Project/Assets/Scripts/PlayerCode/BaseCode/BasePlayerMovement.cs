@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace PlayerCode.BaseCode
 {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(PlayerInputHandler))]
+    [RequireComponent(typeof(PlayerInput))]
     [RequireComponent(typeof(AudioSource))]
     public abstract class BasePlayerController : MonoBehaviour
     {
@@ -159,7 +159,7 @@ namespace PlayerCode.BaseCode
 
         public void HandleMoveInput(InputAction.CallbackContext c)
         {
-            if (c.control.device != device) return;
+            Debug.Log("Test");
             _moveInput = c.ReadValue<Vector2>();
         }
 
@@ -340,18 +340,16 @@ namespace PlayerCode.BaseCode
         protected BasePlayerController Hitbox()
         {
             Collider[] collidersInRange = Physics.OverlapBox(transform.position, new Vector3(3, 3, 3) / 2);
-            BasePlayerController otherFighter = null;
             foreach (Collider collider in collidersInRange)
             {
                 BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
                 if (controllerToCheck == null) continue;
                 if (controllerToCheck == this) continue;
 
-                otherFighter = controllerToCheck;
-                break;
+                return controllerToCheck;
             }
 
-            return otherFighter;
+            return null;
         }
 
         protected virtual void Block()

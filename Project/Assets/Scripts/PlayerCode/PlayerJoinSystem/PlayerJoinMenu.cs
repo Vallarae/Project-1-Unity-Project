@@ -7,9 +7,14 @@ public class PlayerJoinMenu : MonoBehaviour
 {
     public GameObject playerJoinPrefab;
 
+    private void Start()
+    {
+        GetComponent<PlayerInputManager>().onPlayerJoined += AddPlayer;
+    }
+
     private void Update()
     {
-        foreach (var device in InputSystem.devices)
+        /*foreach (var device in InputSystem.devices)
         {
             if (WasJoinedThisFrame(device))
             {
@@ -18,7 +23,7 @@ public class PlayerJoinMenu : MonoBehaviour
                     AddPlayer(device);
                 }
             }
-        }
+        }*/
 
         if (PlayerManager.instance.players.Count == 2)
         {
@@ -37,16 +42,17 @@ public class PlayerJoinMenu : MonoBehaviour
         return false;
     }
 
-    private void AddPlayer(InputDevice device)
+    private void AddPlayer(PlayerInput player)
     {
-        PlayerInput playerInput = PlayerInput.Instantiate(
+        Debug.Log($"Adding {player.GetDevice<InputDevice>()}");
+        /*PlayerInput playerInput = PlayerInput.Instantiate(
             playerJoinPrefab,
             pairWithDevice: device,
             controlScheme: null,
             playerIndex: PlayerManager.instance.players.Count
-        );
+        );*/
 
-        PlayerManager.instance.RegisterPlayer(playerInput);
-        Destroy(playerInput.gameObject);
+        PlayerManager.instance.RegisterPlayer(player);
+        /*Destroy(playerInput.gameObject);*/
     }
 }
