@@ -12,8 +12,8 @@ public class GameSceneSpawner : MonoBehaviour
         {
             var obj = Instantiate(defaultPlayer, transform.position, Quaternion.identity);
 
-            BasePlayerController _playerController = obj.GetComponent<BasePlayerController>();
-            _playerController.device = player.device;
+            var input = obj.GetComponent<PlayerInput>();
+            input.SwitchCurrentControlScheme(player.controlScheme, player.device);
         }
     }
 }

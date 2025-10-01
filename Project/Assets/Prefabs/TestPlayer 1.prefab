@@ -171,10 +171,9 @@ MonoBehaviour:
   maxBlockHoldTime: 2
   blockAfterAttackCooldown: 0.2
   blockSound: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 1
   takeDamageSound: {fileID: 0}
   ultimateCooldownDuration: 100
-  _moveInput: {x: 0, y: 0}
 --- !u!114 &1558986901807047608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +204,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3133566622527051801}
         m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
           Assembly-CSharp
-        m_MethodName: HandleMoveInput
+        m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -218,23 +217,88 @@ MonoBehaviour:
     m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
     m_ActionName: 'Player/Move[/XInputControllerWindows/leftStick,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3133566622527051801}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
+          Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
     m_ActionName: 'Player/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3133566622527051801}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
+          Assembly-CSharp
+        m_MethodName: onAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 76612c25-68b5-4c7d-946b-1dad7f411520
     m_ActionName: 'Player/Attack[/Keyboard/j,/XInputControllerWindows/buttonWest]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3133566622527051801}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
+          Assembly-CSharp
+        m_MethodName: onBlock
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 2b8b87c1-de26-4ccf-bf31-73c1e3bd6ac9
     m_ActionName: 'Player/Block[/Keyboard/k,/XInputControllerWindows/buttonEast]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3133566622527051801}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
+          Assembly-CSharp
+        m_MethodName: onAbility
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: db617113-f333-4382-a4d2-54acebf41b32
     m_ActionName: 'Player/Ability[/Keyboard/l,/XInputControllerWindows/leftShoulder]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3133566622527051801}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
+          Assembly-CSharp
+        m_MethodName: onUltimate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 75595f8a-7889-4b66-8314-eba20f5ae371
     m_ActionName: 'Player/Ultimate[/Keyboard/i,/XInputControllerWindows/buttonNorth]'
   - m_PersistentCalls:
@@ -279,7 +343,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!75 &3090071526637914363

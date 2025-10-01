@@ -56,7 +56,7 @@ namespace PlayerCode.BaseCode
         [NonSerialized] public InputDevice device;
 
         //stores the player inputs into variables
-        [SerializeField] private Vector2 _moveInput;
+        private Vector2 _moveInput;
         private bool _jumpButtonDown;
         private bool _attackKeyDown;
         private bool _blockKeyDown;
@@ -157,74 +157,34 @@ namespace PlayerCode.BaseCode
 
         #region Input Methods
 
-        public void HandleMoveInput(InputAction.CallbackContext c)
+        public void OnMove(InputAction.CallbackContext cc)
         {
-            Debug.Log("Test");
-            _moveInput = c.ReadValue<Vector2>();
+            _moveInput = cc.ReadValue<Vector2>();
         }
 
-        public void HandleMoveInputEnd(InputAction.CallbackContext c)
+        public void OnJump(InputAction.CallbackContext cc)
         {
-            if (c.control.device != device) return;
-            _moveInput = Vector3.zero;
+            _jumpButtonDown = cc.performed;
         }
 
-        public void HandleJumpPressed(InputAction.CallbackContext c)
+        public void onAttack(InputAction.CallbackContext cc)
         {
-            if (c.control.device != device) return;
-            _jumpButtonDown = true;
+            _attackKeyDown = cc.performed;
         }
 
-        public void HandleJumpRelease(InputAction.CallbackContext c)
+        public void onBlock(InputAction.CallbackContext cc)
         {
-            if (c.control.device != device) return;
-            _jumpButtonDown = false;
+            _blockKeyDown = cc.performed;
         }
 
-        public void HandleAttackPressed(InputAction.CallbackContext c)
+        public void onAbility(InputAction.CallbackContext cc)
         {
-            if (c.control.device != device) return;
-            _attackKeyDown = true;
+            _abilityKeyDown = cc.performed;
         }
 
-        public void HandleAttackReleased(InputAction.CallbackContext c)
+        public void onUltimate(InputAction.CallbackContext cc)
         {
-            if (c.control.device != device) return;
-            _attackKeyDown = false;
-        }
-
-        public void HandleBlockPressed(InputAction.CallbackContext c)
-        {
-            if (c.control.device != device) return;
-            _blockKeyDown = true;
-        }
-
-        public void HandleBlockReleased(InputAction.CallbackContext c)
-        {
-            if (c.control.device != device) return;
-            _blockKeyDown = false;
-        }
-
-        public void HandleAbilityPressed(InputAction.CallbackContext c)
-        {
-            if (c.control.device != device) return;
-            _abilityKeyDown = true;
-        }
-        public void HandleAbilityRelease(InputAction.CallbackContext c)
-        {
-            if (c.control.device != device) return;
-            _abilityKeyDown = false;
-        }
-
-        public void HandleUltimatePressed(InputAction.CallbackContext c)
-        {
-            if (c.control.device != device) return;
-            _ultimateKeyDown = true;
-        }
-        public void HandleUltimateRelease(InputAction.CallbackContext c)
-        {
-            if (c.control.device != device) return;
-            _ultimateKeyDown = false;
+            _ultimateKeyDown = cc.performed;
         }
 
         #endregion
@@ -233,7 +193,6 @@ namespace PlayerCode.BaseCode
 
         protected virtual void HandleMovement()
         {
-            //single movement, maybe add velocity later
             rb.linearVelocity = new Vector3(_moveInput.x * walkSpeed, rb.linearVelocity.y, 0);
         }
 
