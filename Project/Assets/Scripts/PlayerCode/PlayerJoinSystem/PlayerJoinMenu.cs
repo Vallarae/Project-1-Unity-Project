@@ -3,17 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class PlayerJoinMenu : MonoBehaviour
-{
+public class PlayerJoinMenu : MonoBehaviour {
     public GameObject playerJoinPrefab;
 
-    private void Start()
-    {
+    private void Start() {
         GetComponent<PlayerInputManager>().onPlayerJoined += AddPlayer;
     }
 
-    private void Update()
-    {
+    private void Update() {
         /*foreach (var device in InputSystem.devices)
         {
             if (WasJoinedThisFrame(device))
@@ -25,14 +22,12 @@ public class PlayerJoinMenu : MonoBehaviour
             }
         }*/
 
-        if (PlayerManager.instance.players.Count == 2)
-        {
+        if (PlayerManager.instance.players.Count == 2) {
             SceneManager.LoadScene(1);
         }
     }
 
-    private bool WasJoinedThisFrame(InputDevice device)
-    {
+    private bool WasJoinedThisFrame(InputDevice device) {
         var gamepad = device as Gamepad;
         if (gamepad != null && gamepad.buttonSouth.wasPressedThisFrame) return true;
 
@@ -42,8 +37,7 @@ public class PlayerJoinMenu : MonoBehaviour
         return false;
     }
 
-    private void AddPlayer(PlayerInput player)
-    {
+    private void AddPlayer(PlayerInput player) {
         Debug.Log($"Adding {player.GetDevice<InputDevice>()}");
         /*PlayerInput playerInput = PlayerInput.Instantiate(
             playerJoinPrefab,
