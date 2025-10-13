@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Device;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 namespace PlayerCode.BaseCode {
     [RequireComponent(typeof(Rigidbody))]
@@ -145,6 +147,19 @@ namespace PlayerCode.BaseCode {
 
         private void OnDestroy() {
             PlayerLookupMap.RemovePlayer(GetComponent<Collider>());
+
+            List<PlayerInfo> players = new List<PlayerInfo>();
+
+            foreach (PlayerInfo player in PlayerManager.instance.players)
+            {
+                int index = PlayerManager.instance.players.IndexOf(player);
+                player.selectedCharacter = null;
+                players.Add(player);
+            }
+
+            PlayerManager.instance.players = players;
+
+            SceneManager.LoadScene(1);
         }
 
         #endregion

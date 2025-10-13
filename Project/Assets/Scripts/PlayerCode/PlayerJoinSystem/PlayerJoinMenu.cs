@@ -23,7 +23,7 @@ public class PlayerJoinMenu : MonoBehaviour {
         }*/
 
         if (PlayerManager.instance.players.Count == 2) {
-            SceneManager.LoadScene(1);
+            //SceneManager.LoadScene(1);
         }
     }
 
