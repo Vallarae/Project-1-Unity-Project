@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Device;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
@@ -14,10 +14,11 @@ namespace PlayerCode.BaseCode {
     public abstract class BasePlayerController : MonoBehaviour {
         #region Variables
 
-        [Header("Movement Settings")] [SerializeField]
-        protected float walkSpeed = 3f;
-
+        [Header("Movement Settings")] 
+        [SerializeField] protected float walkSpeed = 3f;
         [SerializeField] protected float jumpHeight = 2f;
+        [SerializeField] protected float dashForce = 3f;
+        [SerializeField] protected float dashCooldown = 4f;
         protected LayerMask groundMask;
 
         [Space] [Header("Light Attacks Settings")] [SerializeField]
@@ -36,6 +37,9 @@ namespace PlayerCode.BaseCode {
         [SerializeField] protected float heavyAttackKnockbackForce = 5f;
         [SerializeField] protected float heavyAttackCooldownDuration = 0.5f;
         [SerializeField] protected AudioClip heavyAttackSound;
+
+        [Space] [Header("Hitbox Settings")]
+        [SerializeField] protected Vector3 hitbox;
 
         [Space] [Header("Block Settings")] [SerializeField]
         protected float blockCooldown = 3;
@@ -58,14 +62,18 @@ namespace PlayerCode.BaseCode {
         //stores the player inputs into variables
         private Vector2 _moveInput;
         private bool _jumpButtonDown;
+        private bool _dashButtonDown;
         private bool _attackKeyDown;
         private bool _blockKeyDown;
         private bool _abilityKeyDown;
         private bool _ultimateKeyDown;
 
         private float _holdAttackTime;
-
         private float _holdBlockTime;
+
+        private int hitCount;
+        private bool hasAirAttacked;
+        private bool canMove;
 
         //references
         protected Rigidbody rb;
@@ -76,13 +84,16 @@ namespace PlayerCode.BaseCode {
 
         //cooldown handling
         private float _attackCooldown;
+        private float _timeSinceLastHit;
         private float _blockCooldown;
         private float _stunDuration;
         private float _ultimateCooldown;
+        private float _dashCooldown;
 
         //other variables
         private int _currentHealth;
         private CombatState _state = CombatState.Normal;
+        [NonSerialized] public Slider healthBarUI;
 
         #endregion
 
@@ -104,13 +115,15 @@ namespace PlayerCode.BaseCode {
 
         private void Update() {
             HandleCooldowns();
+            HandleHealthBar();
         }
 
         private void FixedUpdate() {
             if (_stunDuration > 0) return;
-            if (!isBlocking) {
+            if (!isBlocking && canMove) {
                 HandleMovement();
                 HandleJump();
+                HandleDash();
             }
 
             CombatManager();
@@ -122,7 +135,7 @@ namespace PlayerCode.BaseCode {
 
             BasePlayerController otherPlayer = Hitbox();
             Gizmos.color = otherPlayer == null ? Color.red : Color.green;
-            Gizmos.DrawWireCube(transform.position, new Vector3(3, 3, 3));
+            Gizmos.DrawWireCube(transform.position, hitbox);
 
             switch (_state) {
                 case CombatState.Normal:
@@ -141,6 +154,8 @@ namespace PlayerCode.BaseCode {
                     Gizmos.color = Color.yellow;
                     break;
             }
+
+            if (_stunDuration > 0) Gizmos.color = Color.white;
 
             Gizmos.DrawCube(transform.position, new Vector3(1, 1, 1));
         }
@@ -174,6 +189,10 @@ namespace PlayerCode.BaseCode {
             _jumpButtonDown = cc.performed;
         }
 
+        public void OnDash(InputAction.CallbackContext cc) {
+            _dashButtonDown = cc.performed;
+        }
+
         public void onAttack(InputAction.CallbackContext cc) {
             _attackKeyDown = cc.performed;
         }
@@ -202,6 +221,13 @@ namespace PlayerCode.BaseCode {
             if (!(_jumpButtonDown && isGrounded)) return;
 
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+        }
+
+        protected virtual void HandleDash() {
+            if (!_dashButtonDown || _dashCooldown > 0) return;
+
+            _dashCooldown = dashCooldown;
+            rb.AddForce((Vector3.right * _moveInput.x) * dashForce, ForceMode.Impulse);
         }
 
         #endregion
@@ -240,26 +266,39 @@ namespace PlayerCode.BaseCode {
         }
 
         protected virtual void Attack() {
+            if (_attackCooldown > 0) return;
+
             bool isLightAttack = _holdAttackTime < heavyAttackHoldTime;
+
+            AttackData data = GetAttackData(isLightAttack);
+            _attackCooldown = data.cooldown;
+
             _holdAttackTime = 0f;
 
             audioSource.PlayOneShot(isLightAttack ? lightAttackSound : heavyAttackSound);
 
-            Stun(0.25f);
+            Stun(0.1f);
+
+            if (!isGrounded) hasAirAttacked = true;
 
             BasePlayerController target = Hitbox();
             if (target == null) return;
 
             if (isLightAttack && target.isBlocking) {
                 target.audioSource.PlayOneShot(target.blockSound);
+                _attackCooldown = 1.5f;
                 return;
             }
 
-            AttackData data = GetAttackData(isLightAttack);
+            hitCount++;
+            _timeSinceLastHit = 0;
 
-            _attackCooldown = data.cooldown;
+            ApplyAttack(target, data, hitCount >= 4);
 
-            ApplyAttack(target, data);
+            if (hitCount >= 4) { 
+                hitCount = 0; 
+                _attackCooldown = 1.5f; 
+            }
         }
 
         private AttackData GetAttackData(bool isLight) {
@@ -270,7 +309,7 @@ namespace PlayerCode.BaseCode {
                     heavyAttackCooldownDuration, isLight);
         }
 
-        private void ApplyAttack(BasePlayerController target, AttackData data) {
+        private void ApplyAttack(BasePlayerController target, AttackData data, bool doesKnockback = false) {
             target.audioSource.PlayOneShot(target.takeDamageSound);
 
             Vector3 direction =
@@ -280,7 +319,7 @@ namespace PlayerCode.BaseCode {
             direction.z = 0;
 
             target.Damage(data.damage);
-            target.Knockback(direction, data.knockback);
+            if(doesKnockback) target.Knockback(direction, data.knockback);
             target.Stun(data.stunDuration);
 
             if (!data.isLightAttack && target.isBlocking) {
@@ -289,7 +328,7 @@ namespace PlayerCode.BaseCode {
         }
 
         protected BasePlayerController Hitbox() {
-            Collider[] collidersInRange = Physics.OverlapBox(transform.position, new Vector3(3, 3, 3) / 2);
+            Collider[] collidersInRange = Physics.OverlapBox(transform.position, hitbox / 2);
             foreach (Collider collider in collidersInRange) {
                 BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
                 if (controllerToCheck == null) continue;
@@ -347,7 +386,7 @@ namespace PlayerCode.BaseCode {
         #region Check Methods
 
         protected bool isGrounded => Physics.Raycast(transform.position, Vector3.down, 1.2f, groundMask);
-        protected bool canAttack => !_attackKeyDown && _holdAttackTime > 0 && _attackCooldown < 0 && _stunDuration < 0;
+        protected bool canAttack => !_attackKeyDown && _holdAttackTime > 0 && _attackCooldown < 0 && _stunDuration < 0 && !hasAirAttacked;
         protected bool canBlock => _blockKeyDown && _blockCooldown < 0 && _stunDuration < 0;
 
         #endregion
@@ -359,10 +398,26 @@ namespace PlayerCode.BaseCode {
             _blockCooldown -= Time.deltaTime;
             _stunDuration -= Time.deltaTime;
             _ultimateCooldown -= Time.deltaTime;
+            _timeSinceLastHit += Time.deltaTime;
+            _dashCooldown -= Time.deltaTime;
+
+            canMove = !_attackKeyDown;
+
+            if (_timeSinceLastHit > 1) hitCount = 0;
+            if (isGrounded && hasAirAttacked) _holdAttackTime = 0;
+            if (isGrounded) hasAirAttacked = false;
 
             if (_attackKeyDown) _holdAttackTime += Time.deltaTime;
             if (_blockKeyDown) _holdBlockTime += Time.deltaTime;
             else _holdBlockTime = 0;
+        }
+        
+        private void HandleHealthBar() {
+            if (healthBarUI == null) return;
+            float value = (float) _currentHealth / maxHealth;
+            Debug.Log($"{gameObject.name}: {value}");
+
+            healthBarUI.value = value;
         }
 
         #endregion
