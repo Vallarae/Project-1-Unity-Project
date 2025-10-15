@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1558986901807047608}
   - component: {fileID: 3090071526637914363}
   - component: {fileID: 3267438082134449085}
+  - component: {fileID: 2161116501663090836}
   m_Layer: 6
   m_Name: TestPlayer 1
   m_TagString: Untagged
@@ -99,7 +100,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1300956621301685895}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f2cb0e02f19a17543b59cfde9ccebaac, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -140,7 +141,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!114 &3133566622527051801
 MonoBehaviour:
@@ -155,9 +156,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 3
-  jumpHeight: 2
-  dashForce: 3
-  dashCooldown: 0
+  jumpHeight: 5
+  dashForce: {x: 20, y: 7, z: 0}
+  dashCooldown: 1
   lightAttackDamage: 3
   lightAttackStunDuration: 1.25
   lightAttackKnockbackForce: 8
@@ -475,3 +476,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2161116501663090836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300956621301685895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca55ed302d64ff41adc97d51a1d1251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

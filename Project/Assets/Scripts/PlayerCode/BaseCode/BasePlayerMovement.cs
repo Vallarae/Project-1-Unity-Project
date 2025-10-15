@@ -11,13 +11,14 @@ namespace PlayerCode.BaseCode {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(PlayerInput))]
     [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof(AnimationController))]
     public abstract class BasePlayerController : MonoBehaviour {
         #region Variables
 
         [Header("Movement Settings")] 
         [SerializeField] protected float walkSpeed = 3f;
         [SerializeField] protected float jumpHeight = 2f;
-        [SerializeField] protected float dashForce = 3f;
+        [SerializeField] protected Vector3 dashForce = new Vector3(3, 2, 0);
         [SerializeField] protected float dashCooldown = 4f;
         protected LayerMask groundMask;
 
@@ -78,6 +79,7 @@ namespace PlayerCode.BaseCode {
         //references
         protected Rigidbody rb;
         protected AudioSource audioSource;
+        protected AnimationController animationController;
 
         //for other scripts
         [NonSerialized] public bool isBlocking = false;
@@ -102,6 +104,7 @@ namespace PlayerCode.BaseCode {
         private void Start() {
             rb = GetComponent<Rigidbody>();
             audioSource = GetComponent<AudioSource>();
+            animationController = GetComponent<AnimationController>();
 
             rb.constraints = RigidbodyConstraints.FreezePositionZ;
             rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -115,12 +118,13 @@ namespace PlayerCode.BaseCode {
 
         private void Update() {
             HandleCooldowns();
+            UpdateAnimationValues();
             HandleHealthBar();
         }
 
         private void FixedUpdate() {
             if (_stunDuration > 0) return;
-            if (!isBlocking && canMove) {
+            if (!isBlocking && canMove && _dashCooldown < 0.8f) {
                 HandleMovement();
                 HandleJump();
                 HandleDash();
@@ -215,6 +219,11 @@ namespace PlayerCode.BaseCode {
 
         protected virtual void HandleMovement() {
             rb.linearVelocity = new Vector3(_moveInput.x * walkSpeed, rb.linearVelocity.y, 0);
+            Vector3 position = transform.position;
+            position.z = 0;
+            transform.position = position;
+
+            animationController.SetXMovementValue(_moveInput.magnitude);
         }
 
         protected virtual void HandleJump() {
@@ -227,7 +236,7 @@ namespace PlayerCode.BaseCode {
             if (!_dashButtonDown || _dashCooldown > 0) return;
 
             _dashCooldown = dashCooldown;
-            rb.AddForce((Vector3.right * _moveInput.x) * dashForce, ForceMode.Impulse);
+            rb.AddForce(_moveInput * dashForce, ForceMode.Impulse);
         }
 
         #endregion
@@ -287,6 +296,15 @@ namespace PlayerCode.BaseCode {
             if (isLightAttack && target.isBlocking) {
                 target.audioSource.PlayOneShot(target.blockSound);
                 _attackCooldown = 1.5f;
+
+                Vector3 direction =
+                target.gameObject.transform.position
+                - transform.position;
+                direction.Normalize();
+                direction.z = 0;
+
+                Knockback(-direction, data.knockback);
+                Damage(1);
                 return;
             }
 
@@ -296,7 +314,6 @@ namespace PlayerCode.BaseCode {
             ApplyAttack(target, data, hitCount >= 4);
 
             if (hitCount >= 4) { 
-                hitCount = 0; 
                 _attackCooldown = 1.5f; 
             }
         }
@@ -309,7 +326,7 @@ namespace PlayerCode.BaseCode {
                     heavyAttackCooldownDuration, isLight);
         }
 
-        private void ApplyAttack(BasePlayerController target, AttackData data, bool doesKnockback = false) {
+        private void ApplyAttack(BasePlayerController target, AttackData data, bool doesHeavyKnockback = false) {
             target.audioSource.PlayOneShot(target.takeDamageSound);
 
             Vector3 direction =
@@ -319,7 +336,7 @@ namespace PlayerCode.BaseCode {
             direction.z = 0;
 
             target.Damage(data.damage);
-            if(doesKnockback) target.Knockback(direction, data.knockback);
+            target.Knockback(direction, doesHeavyKnockback ? data.knockback : data.knockback / 5);
             target.Stun(data.stunDuration);
 
             if (!data.isLightAttack && target.isBlocking) {
@@ -330,6 +347,21 @@ namespace PlayerCode.BaseCode {
         protected BasePlayerController Hitbox() {
             Collider[] collidersInRange = Physics.OverlapBox(transform.position, hitbox / 2);
             foreach (Collider collider in collidersInRange) {
+                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
+                if (controllerToCheck == null) continue;
+                if (controllerToCheck == this) continue;
+
+                return controllerToCheck;
+            }
+
+            return null;
+        }
+
+        protected BasePlayerController FindOther()
+        {
+            Collider[] collidersInRange = Physics.OverlapBox(transform.position, hitbox * 2);
+            foreach (Collider collider in collidersInRange)
+            {
                 BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
                 if (controllerToCheck == null) continue;
                 if (controllerToCheck == this) continue;
@@ -366,6 +398,7 @@ namespace PlayerCode.BaseCode {
 
         protected virtual void Damage(int inDamage) {
             _currentHealth -= inDamage;
+            animationController.OnHitTake();
 
             if (_currentHealth <= 0) {
                 Destroy(this.gameObject);
@@ -403,7 +436,7 @@ namespace PlayerCode.BaseCode {
 
             canMove = !_attackKeyDown;
 
-            if (_timeSinceLastHit > 1) hitCount = 0;
+            if (_timeSinceLastHit > 0.65) hitCount = 0;
             if (isGrounded && hasAirAttacked) _holdAttackTime = 0;
             if (isGrounded) hasAirAttacked = false;
 
@@ -411,11 +444,17 @@ namespace PlayerCode.BaseCode {
             if (_blockKeyDown) _holdBlockTime += Time.deltaTime;
             else _holdBlockTime = 0;
         }
+
+        private void UpdateAnimationValues() {
+            animationController.SetYVelocity(rb.linearVelocity.y);
+            animationController.UpdateIsBlocking(isBlocking);
+            animationController.UpdateAttackInput(hitCount);
+            if (FindOther() != null) animationController.TurnToFace(FindOther().gameObject.transform);
+        }
         
         private void HandleHealthBar() {
             if (healthBarUI == null) return;
             float value = (float) _currentHealth / maxHealth;
-            Debug.Log($"{gameObject.name}: {value}");
 
             healthBarUI.value = value;
         }

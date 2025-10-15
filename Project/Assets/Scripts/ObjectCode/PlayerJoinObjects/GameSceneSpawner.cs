@@ -10,9 +10,9 @@ public class GameSceneSpawner : MonoBehaviour {
 
     private void Start() {
         foreach (PlayerInfo player in PlayerManager.instance.players) {
-            var obj = Instantiate(player.selectedCharacter, transform.position, Quaternion.identity);
+            GameObject obj = Instantiate(player.selectedCharacter, transform.position, Quaternion.identity);
 
-            var input = obj.GetComponent<PlayerInput>();
+            PlayerInput input = obj.GetComponent<PlayerInput>();
             input.SwitchCurrentControlScheme(player.controlScheme, player.device);
 
             BasePlayerController controller = obj.GetComponent<BasePlayerController>();

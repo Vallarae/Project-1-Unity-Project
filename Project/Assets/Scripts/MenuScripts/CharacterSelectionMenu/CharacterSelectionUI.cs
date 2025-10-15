@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -51,14 +50,7 @@ public class CharacterSelectionUI : MonoBehaviour
         PlayerInput playerInput = GetComponent<PlayerInput>();
         int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
 
-        try
-        {
-            PlayerInfo playerInfo = PlayerManager.instance.players[index];
-            playerInfo.selectedCharacter = characterTwo;
-        }
-        catch (Exception e)
-        {
-            Debug.Log("AHHHHHHHHHHHHHHH");
-        }
+        PlayerInfo playerInfo = PlayerManager.instance.players[index];
+        playerInfo.selectedCharacter = characterTwo;
     }
 }
