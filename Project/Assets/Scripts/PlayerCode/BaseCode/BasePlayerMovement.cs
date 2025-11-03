@@ -1,8 +1,6 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Device;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
@@ -16,48 +14,48 @@ namespace PlayerCode.BaseCode {
         #region Variables
 
         [Header("Movement Settings")] 
-        [SerializeField] protected float walkSpeed = 3f;
-        [SerializeField] protected float jumpHeight = 2f;
-        [SerializeField] protected Vector3 dashForce = new Vector3(3, 2, 0);
-        [SerializeField] protected float dashCooldown = 4f;
+        public float walkSpeed = 3f;
+        public float jumpHeight = 2f;
+        public Vector3 dashForce = new Vector3(3, 2, 0);
+        public float dashCooldown = 4f;
         protected LayerMask groundMask;
 
-        [Space] [Header("Light Attacks Settings")] [SerializeField]
-        protected int lightAttackDamage = 3;
+        [Space] [Header("Light Attacks Settings")]
+        public int lightAttackDamage = 3;
+        public float lightAttackStunDuration = 0.25f;
+        public float lightAttackKnockbackForce = 3f;
+        public float lightAttackCooldownDuration = 0.25f;
+        public AudioClip lightAttackSound;
 
-        [SerializeField] protected float lightAttackStunDuration = 0.25f;
-        [SerializeField] protected float lightAttackKnockbackForce = 3f;
-        [SerializeField] protected float lightAttackCooldownDuration = 0.25f;
-        [SerializeField] protected AudioClip lightAttackSound;
-
-        [Space] [Header("Heavy Attacks Settings")] [SerializeField]
-        protected int heavyAttackDamage = 5;
-
-        [SerializeField] protected float heavyAttackHoldTime = 0.3f;
-        [SerializeField] protected float heavyAttackStunDuration = 0.75f;
-        [SerializeField] protected float heavyAttackKnockbackForce = 5f;
-        [SerializeField] protected float heavyAttackCooldownDuration = 0.5f;
-        [SerializeField] protected AudioClip heavyAttackSound;
+        [Space] [Header("Heavy Attacks Settings")]
+        public int heavyAttackDamage = 5;
+        public float heavyAttackHoldTime = 0.3f;
+        public float heavyAttackStunDuration = 0.75f;
+        public float heavyAttackKnockbackForce = 5f;
+        public float heavyAttackCooldownDuration = 0.5f;
+        public AudioClip heavyAttackSound;
 
         [Space] [Header("Hitbox Settings")]
-        [SerializeField] protected Vector3 hitbox;
+        public Vector3 hitbox;
 
-        [Space] [Header("Block Settings")] [SerializeField]
-        protected float blockCooldown = 3;
+        [Space] [Header("Block Settings")]
+        public float blockCooldown = 3;
+        public float maxBlockHoldTime = 2f;
+        public float blockAfterAttackCooldown = 0.2f;
+        public AudioClip blockSound;
 
-        [SerializeField] protected float maxBlockHoldTime = 2f;
-        [SerializeField] protected float blockAfterAttackCooldown = 0.2f;
-        [SerializeField] protected AudioClip blockSound;
+        [Space] [Header("Health Settings")]
+        public int maxHealth = 100;
 
-        [Space] [Header("Health Settings")] [SerializeField]
-        protected int maxHealth = 100;
-
-        [SerializeField] protected AudioClip takeDamageSound;
+        public AudioClip takeDamageSound;
 
         [Space] [Header("Ultimate Settings")] [SerializeField]
         protected float ultimateCooldownDuration = 100f;
-
         [NonSerialized] public bool canUseAbility = false;
+
+        [Space]
+        [Header("Debug")]
+        public bool showInputVariables;
 
         //stores the player inputs into variables
         protected Vector2 _moveInput;
@@ -95,6 +93,15 @@ namespace PlayerCode.BaseCode {
         private int _currentHealth;
         private CombatState _state = CombatState.Normal;
         [NonSerialized] public Slider healthBarUI;
+        
+        //editor values -> might not be needed
+        [NonSerialized] public bool movementTab;
+        [NonSerialized] public bool lightAttackTab;
+        [NonSerialized] public bool heavyAttackTab;
+        [NonSerialized] public bool hitboxTab;
+        [NonSerialized] public bool blockTab;
+        [NonSerialized] public bool healthTab;
+        [NonSerialized] public bool debugTab;
 
         #endregion
 
@@ -130,7 +137,6 @@ namespace PlayerCode.BaseCode {
         }
 
         private void FixedUpdate() {
-            Debug.Log("Fixed Update Running");
             if (_stunDuration > 0) return;
             if (!isBlocking && canMove && _dashCooldown < 0.8f) {
                 HandleMovement();
