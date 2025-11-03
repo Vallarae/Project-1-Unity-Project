@@ -168,28 +168,68 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1294892128559850198, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_Range
+      value: 8.18
+      objectReference: {fileID: 0}
+    - target: {fileID: -1294892128559850198, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
       propertyPath: m_Intensity
-      value: 149.62
+      value: 35.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1294892128559850198, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -206254283356321021, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_Range
+      value: 8.18
       objectReference: {fileID: 0}
     - target: {fileID: -206254283356321021, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
       propertyPath: m_Intensity
-      value: 149.62
+      value: 35.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -206254283356321021, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
       propertyPath: m_Name
       value: project1map
       objectReference: {fileID: 0}
     - target: {fileID: 5958438921693756439, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_Range
+      value: 8.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5958438921693756439, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
       propertyPath: m_Intensity
-      value: 149.62
+      value: 35.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5958438921693756439, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800325588945520740, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_Range
+      value: 8.18
       objectReference: {fileID: 0}
     - target: {fileID: 6800325588945520740, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
       propertyPath: m_Intensity
-      value: 149.62
+      value: 35.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6800325588945520740, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8912049515002365231, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_Range
+      value: 8.18
       objectReference: {fileID: 0}
     - target: {fileID: 8912049515002365231, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
       propertyPath: m_Intensity
-      value: 149.62
+      value: 35.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8912049515002365231, guid: 0759ef7cd3f4c8d48ae819c869a88050, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1681,7 +1721,7 @@ Transform:
   m_GameObject: {fileID: 1837299390}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.39, z: 0}
+  m_LocalPosition: {x: 0, y: -2.555, z: 0}
   m_LocalScale: {x: 53.253, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7417807156523893521}
   - component: {fileID: 6213563175900916082}
   - component: {fileID: 5609979028738918677}
-  - component: {fileID: 3133566622527051801}
   - component: {fileID: 1558986901807047608}
+  - component: {fileID: -5691579512763993768}
   - component: {fileID: 3090071526637914363}
   - component: {fileID: 3267438082134449085}
   - component: {fileID: 2161116501663090836}
@@ -143,41 +143,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!114 &3133566622527051801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1300956621301685895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c7dc85769e9450985a02449a6e734e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeed: 3
-  jumpHeight: 5
-  dashForce: {x: 20, y: 7, z: 0}
-  dashCooldown: 1
-  lightAttackDamage: 3
-  lightAttackStunDuration: 1.25
-  lightAttackKnockbackForce: 8
-  lightAttackCooldownDuration: 0.25
-  lightAttackSound: {fileID: 0}
-  heavyAttackDamage: 5
-  heavyAttackHoldTime: 0.3
-  heavyAttackStunDuration: 1.75
-  heavyAttackKnockbackForce: 10
-  heavyAttackCooldownDuration: 0.5
-  heavyAttackSound: {fileID: 0}
-  hitbox: {x: 3, y: 3, z: 0}
-  blockCooldown: 3
-  maxBlockHoldTime: 2
-  blockAfterAttackCooldown: 0.2
-  blockSound: {fileID: 0}
-  maxHealth: 100
-  takeDamageSound: {fileID: 0}
-  ultimateCooldownDuration: 100
 --- !u!114 &1558986901807047608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,9 +170,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3133566622527051801}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
-          Assembly-CSharp
+      - m_Target: {fileID: -5691579512763993768}
+        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -222,9 +186,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Move[/XInputControllerWindows/leftStick,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3133566622527051801}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
-          Assembly-CSharp
+      - m_Target: {fileID: -5691579512763993768}
+        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
@@ -239,9 +202,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3133566622527051801}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
-          Assembly-CSharp
+      - m_Target: {fileID: -5691579512763993768}
+        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
         m_MethodName: onAttack
         m_Mode: 0
         m_Arguments:
@@ -256,9 +218,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Keyboard/j,/XInputControllerWindows/buttonWest]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3133566622527051801}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
-          Assembly-CSharp
+      - m_Target: {fileID: -5691579512763993768}
+        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
         m_MethodName: onBlock
         m_Mode: 0
         m_Arguments:
@@ -273,9 +234,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Block[/Keyboard/k,/XInputControllerWindows/buttonEast]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3133566622527051801}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
-          Assembly-CSharp
+      - m_Target: {fileID: -5691579512763993768}
+        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
         m_MethodName: onAbility
         m_Mode: 0
         m_Arguments:
@@ -290,9 +250,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Ability[/Keyboard/l,/XInputControllerWindows/leftShoulder]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3133566622527051801}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
-          Assembly-CSharp
+      - m_Target: {fileID: -5691579512763993768}
+        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
         m_MethodName: onUltimate
         m_Mode: 0
         m_Arguments:
@@ -347,9 +306,8 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3133566622527051801}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.TestCharacter.TestCharacterController,
-          Assembly-CSharp
+      - m_Target: {fileID: -5691579512763993768}
+        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
         m_MethodName: OnDash
         m_Mode: 0
         m_Arguments:
@@ -367,6 +325,48 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &-5691579512763993768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300956621301685895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e696bc0b241f5e14fbacae031bac0433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 3
+  jumpHeight: 2
+  dashForce: {x: 3, y: 2, z: 0}
+  dashCooldown: 4
+  lightAttackDamage: 3
+  lightAttackStunDuration: 0.25
+  lightAttackKnockbackForce: 3
+  lightAttackCooldownDuration: 0.25
+  lightAttackSound: {fileID: 0}
+  heavyAttackDamage: 5
+  heavyAttackHoldTime: 0.3
+  heavyAttackStunDuration: 0.75
+  heavyAttackKnockbackForce: 5
+  heavyAttackCooldownDuration: 0.5
+  heavyAttackSound: {fileID: 0}
+  hitbox: {x: 5, y: 3, z: 0}
+  blockCooldown: 3
+  maxBlockHoldTime: 2
+  blockAfterAttackCooldown: 0.2
+  blockSound: {fileID: 0}
+  maxHealth: 100
+  takeDamageSound: {fileID: 0}
+  ultimateCooldownDuration: 100
+  abilityHitboxSize: {x: 2, y: 2, z: 2}
+  abilityPositionOffset: {x: 0, y: 0, z: 1}
+  maxHitCount: 7
+  abilityDelay: 0.5
+  abilityDamage: 15
+  abilityStunTime: 3
+  abilityKnockbackForce: 10
 --- !u!75 &3090071526637914363
 ConstantForce:
   m_ObjectHideFlags: 0

@@ -3,13 +3,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class GameSceneSpawner : MonoBehaviour {
+//file contained a lot of redundant code
+public class GameSceneSpawner : MonoBehaviour
+{
     public GameObject defaultPlayer; //temporary for testing
     public Slider healthBarPlayerOne;
     public Slider healthBarPlayerTwo;
 
-    private void Start() {
-        foreach (PlayerInfo player in PlayerManager.instance.players) {
+    private void Start()
+    {
+        foreach (PlayerInfo player in PlayerManager.instance.players)
+        {
             GameObject obj = Instantiate(player.selectedCharacter, transform.position, Quaternion.identity);
 
             PlayerInput input = obj.GetComponent<PlayerInput>();

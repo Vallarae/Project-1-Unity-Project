@@ -10,19 +10,6 @@ public class PlayerJoinMenu : MonoBehaviour {
         GetComponent<PlayerInputManager>().onPlayerJoined += AddPlayer;
     }
 
-    private void Update() {
-        /*foreach (var device in InputSystem.devices)
-        {
-            if (WasJoinedThisFrame(device))
-            {
-                if (!PlayerManager.instance.players.Exists(p => p.device == device))
-                {
-                    AddPlayer(device);
-                }
-            }
-        }*/
-    }
-
     private bool WasJoinedThisFrame(InputDevice device) {
         var gamepad = device as Gamepad;
         if (gamepad != null && gamepad.buttonSouth.wasPressedThisFrame) return true;
@@ -35,14 +22,7 @@ public class PlayerJoinMenu : MonoBehaviour {
 
     private void AddPlayer(PlayerInput player) {
         Debug.Log($"Adding {player.GetDevice<InputDevice>()}");
-        /*PlayerInput playerInput = PlayerInput.Instantiate(
-            playerJoinPrefab,
-            pairWithDevice: device,
-            controlScheme: null,
-            playerIndex: PlayerManager.instance.players.Count
-        );*/
 
         PlayerManager.instance.RegisterPlayer(player);
-        /*Destroy(playerInput.gameObject);*/
     }
 }

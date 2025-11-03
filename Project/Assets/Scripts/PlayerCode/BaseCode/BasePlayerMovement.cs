@@ -58,16 +58,15 @@ namespace PlayerCode.BaseCode {
         protected float ultimateCooldownDuration = 100f;
 
         [NonSerialized] public bool canUseAbility = false;
-        [NonSerialized] public InputDevice device;
 
         //stores the player inputs into variables
-        private Vector2 _moveInput;
-        private bool _jumpButtonDown;
-        private bool _dashButtonDown;
-        private bool _attackKeyDown;
-        private bool _blockKeyDown;
-        private bool _abilityKeyDown;
-        private bool _ultimateKeyDown;
+        protected Vector2 _moveInput;
+        protected bool _jumpButtonDown;
+        protected bool _dashButtonDown;
+        protected bool _attackKeyDown;
+        protected bool _blockKeyDown;
+        protected bool _abilityKeyDown;
+        protected bool _ultimateKeyDown;
 
         private float _holdAttackTime;
         private float _holdBlockTime;
@@ -101,7 +100,14 @@ namespace PlayerCode.BaseCode {
 
         #region Unity Methods
 
-        private void Start() {
+        private void Start()
+        {
+            Initialise();
+        }
+        
+        //moved into seperate class incase start breaks again
+        protected void Initialise()
+        {
             rb = GetComponent<Rigidbody>();
             audioSource = GetComponent<AudioSource>();
             animationController = GetComponent<AnimationController>();
@@ -114,6 +120,7 @@ namespace PlayerCode.BaseCode {
             _currentHealth = maxHealth;
 
             PlayerLookupMap.AddPlayer(GetComponent<Collider>(), this);
+            Debug.Log($"Registered player {this.gameObject.name} in lookup map.");
         }
 
         private void Update() {
@@ -123,6 +130,7 @@ namespace PlayerCode.BaseCode {
         }
 
         private void FixedUpdate() {
+            Debug.Log("Fixed Update Running");
             if (_stunDuration > 0) return;
             if (!isBlocking && canMove && _dashCooldown < 0.8f) {
                 HandleMovement();
@@ -290,7 +298,7 @@ namespace PlayerCode.BaseCode {
 
             if (!isGrounded) hasAirAttacked = true;
 
-            BasePlayerController target = Hitbox();
+            BasePlayerController target = Hitbox(transform.position, hitbox);
             if (target == null) return;
 
             if (isLightAttack && target.isBlocking) {
@@ -326,7 +334,7 @@ namespace PlayerCode.BaseCode {
                     heavyAttackCooldownDuration, isLight);
         }
 
-        private void ApplyAttack(BasePlayerController target, AttackData data, bool doesHeavyKnockback = false) {
+        protected void ApplyAttack(BasePlayerController target, AttackData data, bool doesHeavyKnockback = false) {
             target.audioSource.PlayOneShot(target.takeDamageSound);
 
             Vector3 direction =
@@ -344,8 +352,23 @@ namespace PlayerCode.BaseCode {
             }
         }
 
-        protected BasePlayerController Hitbox() {
+        protected BasePlayerController Hitbox()
+        {
             Collider[] collidersInRange = Physics.OverlapBox(transform.position, hitbox / 2);
+            foreach (Collider collider in collidersInRange)
+            {
+                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
+                if (controllerToCheck == null) continue;
+                if (controllerToCheck == this) continue;
+
+                return controllerToCheck;
+            }
+
+            return null;
+        }
+        
+        protected BasePlayerController Hitbox(Vector3 offset, Vector3 size) {
+            Collider[] collidersInRange = Physics.OverlapBox(transform.position + offset, size / 2);
             foreach (Collider collider in collidersInRange) {
                 BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
                 if (controllerToCheck == null) continue;
@@ -384,6 +407,7 @@ namespace PlayerCode.BaseCode {
 
         //These two functions can be left empty, as they will be unique per player
         protected virtual void Ability() {
+            animationController.OnAbilityUse(true);
             Debug.Log("Ability");
         }
 
