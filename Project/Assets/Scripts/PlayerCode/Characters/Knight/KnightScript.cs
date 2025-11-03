@@ -5,17 +5,15 @@ using System.Runtime.CompilerServices;
 
 public class KnightScript : BasePlayerController
 {
-
-    [Header("Knight Ability Settings")]
-    [SerializeField] protected Vector3 abilityHitboxSize = new Vector3(2f, 2f, 2f);
-    [SerializeField] protected Vector3 abilityPositionOffset = new Vector3(2f, 2f, 2f);
-    [SerializeField] protected Vector3 abilityDashForce = new Vector3(20f, 20f, 0f);
-    [SerializeField] protected float animationTime = 1f;
-    [SerializeField] protected float abilityDurationTime = 2f;
-    [SerializeField] protected int maxHitCount = 7;
-    [SerializeField] protected int abilityDamage = 15;
-    [SerializeField] protected float abilityStunTime = 3f;
-    [SerializeField] protected float abilityKnockbackForce = 10f;
+    public Vector3 abilityHitboxSize = new Vector3(2f, 2f, 2f);
+    public Vector3 abilityPositionOffset = new Vector3(2f, 2f, 2f);
+    public Vector3 abilityDashForce = new Vector3(20f, 20f, 0f);
+    public float animationTime = 1f;
+    public float abilityDurationTime = 2f;
+    public int maxHitCount = 7;
+    public int abilityDamage = 15;
+    public float abilityStunTime = 3f;
+    public float abilityKnockbackForce = 10f;
 
     private int _abilityHitCount = 0;
     private bool _inAbility = false;
@@ -24,10 +22,12 @@ public class KnightScript : BasePlayerController
     private void Start()
     {
         Initialise();
+        
     }
 
-    protected void Update()
-    {
+    protected void Update() {
+        onUpdate();
+        
         if (_inAbility)
         {
             _abilityDuration += Time.deltaTime;
@@ -51,11 +51,11 @@ public class KnightScript : BasePlayerController
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position + (transform.forward * abilityPositionOffset.x), abilityHitboxSize);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.blue;
+    //     Gizmos.DrawWireCube(transform.position + (transform.forward * abilityPositionOffset.x), abilityHitboxSize);
+    // }
 
     //Dash forwards that does damage and stuns enemies
     protected override void Ability()

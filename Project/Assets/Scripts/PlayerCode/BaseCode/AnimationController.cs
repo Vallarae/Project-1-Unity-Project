@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimationController : MonoBehaviour {
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     private void Start() {
         animator = GetComponent<Animator>();
@@ -12,6 +12,16 @@ public class AnimationController : MonoBehaviour {
     public void SetXMovementValue(float value) {
         if (animator == null) return;
         animator.SetFloat("xMovement", value);
+    }
+
+    public void SetMoveDirection(float value) {
+        if (animator == null) return;
+        
+        float rotation = transform.rotation.y;
+
+        float newValue = rotation == -90 ? -value : value;
+        
+        animator.SetFloat("DirectionMoving", newValue);
     }
 
     public void SetYVelocity(float value) {

@@ -12,22 +12,19 @@ namespace PlayerCode.BaseCode {
     [RequireComponent(typeof(AnimationController))]
     public abstract class BasePlayerController : MonoBehaviour {
         #region Variables
-
-        [Header("Movement Settings")] 
+        
         public float walkSpeed = 3f;
         public float jumpHeight = 2f;
         public Vector3 dashForce = new Vector3(3, 2, 0);
         public float dashCooldown = 4f;
         protected LayerMask groundMask;
-
-        [Space] [Header("Light Attacks Settings")]
+        
         public int lightAttackDamage = 3;
         public float lightAttackStunDuration = 0.25f;
         public float lightAttackKnockbackForce = 3f;
         public float lightAttackCooldownDuration = 0.25f;
         public AudioClip lightAttackSound;
-
-        [Space] [Header("Heavy Attacks Settings")]
+        
         public int heavyAttackDamage = 5;
         public float heavyAttackHoldTime = 0.3f;
         public float heavyAttackStunDuration = 0.75f;
@@ -35,36 +32,30 @@ namespace PlayerCode.BaseCode {
         public float heavyAttackCooldownDuration = 0.5f;
         public AudioClip heavyAttackSound;
 
-        [Space] [Header("Hitbox Settings")]
         public Vector3 hitbox;
 
-        [Space] [Header("Block Settings")]
         public float blockCooldown = 3;
         public float maxBlockHoldTime = 2f;
         public float blockAfterAttackCooldown = 0.2f;
         public AudioClip blockSound;
-
-        [Space] [Header("Health Settings")]
+        
         public int maxHealth = 100;
 
         public AudioClip takeDamageSound;
 
-        [Space] [Header("Ultimate Settings")] [SerializeField]
         protected float ultimateCooldownDuration = 100f;
         [NonSerialized] public bool canUseAbility = false;
-
-        [Space]
-        [Header("Debug")]
+        
         public bool showInputVariables;
 
         //stores the player inputs into variables
-        protected Vector2 _moveInput;
-        protected bool _jumpButtonDown;
-        protected bool _dashButtonDown;
-        protected bool _attackKeyDown;
-        protected bool _blockKeyDown;
-        protected bool _abilityKeyDown;
-        protected bool _ultimateKeyDown;
+        public Vector2 _moveInput;
+        public bool _jumpButtonDown;
+        public bool _dashButtonDown;
+        public bool _attackKeyDown;
+        public bool _blockKeyDown;
+        public bool _abilityKeyDown;
+        public bool _ultimateKeyDown;
 
         private float _holdAttackTime;
         private float _holdBlockTime;
@@ -95,13 +86,7 @@ namespace PlayerCode.BaseCode {
         [NonSerialized] public Slider healthBarUI;
         
         //editor values -> might not be needed
-        [NonSerialized] public bool movementTab;
-        [NonSerialized] public bool lightAttackTab;
-        [NonSerialized] public bool heavyAttackTab;
-        [NonSerialized] public bool hitboxTab;
-        [NonSerialized] public bool blockTab;
-        [NonSerialized] public bool healthTab;
-        [NonSerialized] public bool debugTab;
+        public bool showInputValues;
 
         #endregion
 
@@ -128,9 +113,16 @@ namespace PlayerCode.BaseCode {
 
             PlayerLookupMap.AddPlayer(GetComponent<Collider>(), this);
             Debug.Log($"Registered player {this.gameObject.name} in lookup map.");
+
+            canMove = true;
         }
 
         private void Update() {
+            onUpdate();
+        }
+
+        //to make it work in inheriting scripts
+        protected void onUpdate() {
             HandleCooldowns();
             UpdateAnimationValues();
             HandleHealthBar();
@@ -479,6 +471,7 @@ namespace PlayerCode.BaseCode {
             animationController.SetYVelocity(rb.linearVelocity.y);
             animationController.UpdateIsBlocking(isBlocking);
             animationController.UpdateAttackInput(hitCount);
+            animationController.SetMoveDirection(_moveInput.x);
             if (FindOther() != null) animationController.TurnToFace(FindOther().gameObject.transform);
         }
         

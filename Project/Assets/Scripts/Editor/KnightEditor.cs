@@ -1,14 +1,13 @@
-using UnityEngine;
+﻿using System;
 using UnityEditor;
-using PlayerCode.BaseCode;
-using System;
+using UnityEngine;
 
 namespace Editor {
-    [CustomEditor(typeof(BasePlayerController))]
-    public class BasePlayerControllerEditor : UnityEditor.Editor {
+    [CustomEditor(typeof(KnightScript))]
+    public class KnightEditor : UnityEditor.Editor{
         #region Variables
 
-        private BasePlayerController _controller;
+        private KnightScript _controller;
 
         //Movement Variables
         private SerializedProperty _walkSpeedField;
@@ -30,6 +29,17 @@ namespace Editor {
         private SerializedProperty _heavyAttackCooldownDurationField;
         private SerializedProperty _heavyAttackSoundField;
 
+        //Ability Variables
+        private SerializedProperty _abilityHitboxSizeField;
+        private SerializedProperty _abilityPositionOffsetField;
+        private SerializedProperty _abilityDashForceField;
+        private SerializedProperty _animationTimeForceField;
+        private SerializedProperty _abilityDurationTimeField;
+        private SerializedProperty _maxHitCountField;
+        private SerializedProperty _abilityDamageField;
+        private SerializedProperty _abilityStunTime;
+        private SerializedProperty _abilityKnockbackForceField;
+        
         //Hitbox Settings Variables
         private SerializedProperty _hitBoxField;
         
@@ -57,7 +67,7 @@ namespace Editor {
         #endregion
 
         private void OnEnable() {
-            _controller = (BasePlayerController)target;
+            _controller = (KnightScript)target;
             _walkSpeedField = serializedObject.FindProperty(nameof(_controller.walkSpeed));
             _jumpHeightField = serializedObject.FindProperty(nameof(_controller.jumpHeight));
             _dashForceField = serializedObject.FindProperty(nameof(_controller.dashForce));
@@ -74,6 +84,16 @@ namespace Editor {
             _heavyAttackKnockbackForceField = serializedObject.FindProperty(nameof(_controller.lightAttackKnockbackForce));
             _heavyAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.lightAttackCooldownDuration));
             _heavyAttackSoundField = serializedObject.FindProperty(nameof(_controller.lightAttackSound));
+            
+            _abilityHitboxSizeField = serializedObject.FindProperty(nameof(_controller.abilityHitboxSize));
+            _abilityPositionOffsetField = serializedObject.FindProperty(nameof(_controller.abilityPositionOffset));
+            _abilityDashForceField = serializedObject.FindProperty(nameof(_controller.abilityDashForce));
+            _animationTimeForceField = serializedObject.FindProperty(nameof(_controller.animationTime));
+            _abilityDurationTimeField = serializedObject.FindProperty(nameof(_controller.abilityDurationTime));
+            _maxHitCountField = serializedObject.FindProperty(nameof(_controller.maxHitCount));
+            _abilityDamageField = serializedObject.FindProperty(nameof(_controller.abilityDamage));
+            _abilityStunTime = serializedObject.FindProperty(nameof(_controller.abilityStunTime));
+            _abilityKnockbackForceField = serializedObject.FindProperty(nameof(_controller.abilityKnockbackForce));
 
             _hitBoxField = serializedObject.FindProperty(nameof(_controller.hitbox));
             
@@ -99,7 +119,7 @@ namespace Editor {
             
             GUI.enabled = true;
 
-            _tab = GUILayout.Toolbar(_tab, new String[] { "Movement", "Light Attack", "Heavy Attack", "Hitbox", "Block", "Health", "Debug"} );
+            _tab = GUILayout.Toolbar(_tab, new String[] { "Movement", "Light Attack", "Heavy Attack", "Ability", "Hitbox", "Block", "Health", "Debug"} );
 
             switch (_tab) {
                 case 0:
@@ -123,19 +143,34 @@ namespace Editor {
                     EditorGUILayout.PropertyField(_heavyAttackSoundField);
                     break;
                 case 3:
-                    EditorGUILayout.PropertyField(_hitBoxField);
+                    EditorGUILayout.PropertyField(_abilityDamageField);
+                    EditorGUILayout.PropertyField(_abilityStunTime);
+                    EditorGUILayout.PropertyField(_abilityKnockbackForceField);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.PropertyField(_abilityHitboxSizeField);
+                    EditorGUILayout.PropertyField(_abilityPositionOffsetField);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.PropertyField(_abilityDashForceField);
+                    EditorGUILayout.PropertyField(_abilityDurationTimeField);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.PropertyField(_maxHitCountField);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.PropertyField(_animationTimeForceField);
                     break;
                 case 4:
+                    EditorGUILayout.PropertyField(_hitBoxField);
+                    break;
+                case 5:
                     EditorGUILayout.PropertyField(_blockCooldownField);
                     EditorGUILayout.PropertyField(_maxBlockHoldTimeField);
                     EditorGUILayout.PropertyField(_blockAfterAttackCooldownField);
                     EditorGUILayout.PropertyField(_blockSoundField);
                     break;
-                case 5:
+                case 6:
                     EditorGUILayout.PropertyField(_maxHealthField);
                     EditorGUILayout.PropertyField(_takeDamageSoundField);
                     break;
-                case 6:
+                case 7:
                     EditorGUILayout.PropertyField(_showInputValuesField);
                     if (_showInputValuesField.boolValue) {
                         EditorGUILayout.PropertyField(_moveInputField);

@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 5609979028738918677}
   - component: {fileID: 1558986901807047608}
   - component: {fileID: -5691579512763993768}
+  - component: {fileID: 2161116501663090836}
   - component: {fileID: 3090071526637914363}
   - component: {fileID: 3267438082134449085}
-  - component: {fileID: 2161116501663090836}
   m_Layer: 6
   m_Name: Knight
   m_TagString: Untagged
@@ -38,7 +38,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2594639467837080252}
+  - {fileID: 4762029374967366707}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1229756507160959108
@@ -364,6 +364,15 @@ MonoBehaviour:
   maxHealth: 100
   takeDamageSound: {fileID: 0}
   ultimateCooldownDuration: 100
+  showInputVariables: 0
+  _moveInput: {x: 0, y: 0}
+  _jumpButtonDown: 0
+  _dashButtonDown: 0
+  _attackKeyDown: 0
+  _blockKeyDown: 0
+  _abilityKeyDown: 0
+  _ultimateKeyDown: 0
+  showInputValues: 0
   abilityHitboxSize: {x: 2, y: 2, z: 2}
   abilityPositionOffset: {x: 0, y: 0, z: 1}
   abilityDashForce: {x: 20, y: 20, z: 0}
@@ -373,6 +382,19 @@ MonoBehaviour:
   abilityDamage: 15
   abilityStunTime: 3
   abilityKnockbackForce: 10
+--- !u!114 &2161116501663090836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300956621301685895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca55ed302d64ff41adc97d51a1d1251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!75 &3090071526637914363
 ConstantForce:
   m_ObjectHideFlags: 0
@@ -482,19 +504,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2161116501663090836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1300956621301685895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eca55ed302d64ff41adc97d51a1d1251, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1001 &2560502701848667479
+--- !u!1001 &5016052314664510424
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -504,15 +514,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.02398014
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.843
+      value: -0.952
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.007
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
       propertyPath: m_LocalRotation.w
@@ -546,32 +556,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knight Rig
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3752154122692751725}
+      addedObject: {fileID: 7927324227868526354}
   m_SourcePrefab: {fileID: 100100000, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
---- !u!4 &2594639467837080252 stripped
+--- !u!4 &4762029374967366707 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
-  m_PrefabInstance: {fileID: 2560502701848667479}
+  m_PrefabInstance: {fileID: 5016052314664510424}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3407485996291528710 stripped
+--- !u!1 &5286646317544087177 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
-  m_PrefabInstance: {fileID: 2560502701848667479}
+  m_PrefabInstance: {fileID: 5016052314664510424}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &3752154122692751725
+--- !u!95 &7927324227868526354
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3407485996291528710}
+  m_GameObject: {fileID: 5286646317544087177}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: c4759ed0fbd7b6846aa3d8b2398f4d77, type: 2}
