@@ -61,6 +61,7 @@ namespace Editor {
         private SerializedProperty _attackButtonDownField;
         private SerializedProperty _blockButtonDownField;
         private SerializedProperty _abilityButtonDownField;
+        private SerializedProperty _canMoveField;
 
         private Int32 _tab;
 
@@ -79,11 +80,11 @@ namespace Editor {
             _lightAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.lightAttackCooldownDuration));
             _lightAttackSoundField = serializedObject.FindProperty(nameof(_controller.lightAttackSound));
             
-            _heavyAttackDamageField = serializedObject.FindProperty(nameof(_controller.lightAttackDamage));
-            _heavyAttackStunDurationField = serializedObject.FindProperty(nameof(_controller.lightAttackStunDuration));
-            _heavyAttackKnockbackForceField = serializedObject.FindProperty(nameof(_controller.lightAttackKnockbackForce));
-            _heavyAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.lightAttackCooldownDuration));
-            _heavyAttackSoundField = serializedObject.FindProperty(nameof(_controller.lightAttackSound));
+            _heavyAttackDamageField = serializedObject.FindProperty(nameof(_controller.heavyAttackDamage));
+            _heavyAttackStunDurationField = serializedObject.FindProperty(nameof(_controller.heavyAttackStunDuration));
+            _heavyAttackKnockbackForceField = serializedObject.FindProperty(nameof(_controller.heavyAttackKnockbackForce));
+            _heavyAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.heavyAttackCooldownDuration));
+            _heavyAttackSoundField = serializedObject.FindProperty(nameof(_controller.heavyAttackSound));
             
             _abilityHitboxSizeField = serializedObject.FindProperty(nameof(_controller.abilityHitboxSize));
             _abilityPositionOffsetField = serializedObject.FindProperty(nameof(_controller.abilityPositionOffset));
@@ -112,6 +113,8 @@ namespace Editor {
             _attackButtonDownField = serializedObject.FindProperty(nameof(_controller._attackKeyDown));
             _blockButtonDownField = serializedObject.FindProperty(nameof(_controller._blockKeyDown));
             _abilityButtonDownField = serializedObject.FindProperty(nameof(_controller._abilityKeyDown));
+
+            _canMoveField = serializedObject.FindProperty(nameof(_controller.canMove));
         }
 
         public override void OnInspectorGUI() {
@@ -179,6 +182,7 @@ namespace Editor {
                         EditorGUILayout.PropertyField(_attackButtonDownField);
                         EditorGUILayout.PropertyField(_blockButtonDownField);
                         EditorGUILayout.PropertyField(_abilityButtonDownField);
+                        EditorGUILayout.PropertyField(_canMoveField);
                     }
 
                     break;

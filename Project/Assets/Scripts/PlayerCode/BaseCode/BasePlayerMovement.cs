@@ -62,7 +62,7 @@ namespace PlayerCode.BaseCode {
 
         private int hitCount;
         private bool hasAirAttacked;
-        private bool canMove;
+        public bool canMove;
 
         //references
         protected Rigidbody rb;
@@ -112,7 +112,6 @@ namespace PlayerCode.BaseCode {
             _currentHealth = maxHealth;
 
             PlayerLookupMap.AddPlayer(GetComponent<Collider>(), this);
-            Debug.Log($"Registered player {this.gameObject.name} in lookup map.");
 
             canMove = true;
         }
@@ -243,6 +242,7 @@ namespace PlayerCode.BaseCode {
 
             _dashCooldown = dashCooldown;
             rb.AddForce(_moveInput * dashForce, ForceMode.Impulse);
+            animationController.UpdateIsDashing(true);
         }
 
         #endregion
@@ -406,7 +406,6 @@ namespace PlayerCode.BaseCode {
         //These two functions can be left empty, as they will be unique per player
         protected virtual void Ability() {
             animationController.OnAbilityUse(true);
-            Debug.Log("Ability");
         }
 
         protected virtual void Ultimate() {
@@ -415,7 +414,6 @@ namespace PlayerCode.BaseCode {
 
         protected virtual void Knockback(Vector3 direction, float knockbackForce) {
             rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
-            Debug.Log(this.gameObject.name + " has taken knockback");
         }
 
         protected virtual void Damage(int inDamage) {
@@ -472,6 +470,7 @@ namespace PlayerCode.BaseCode {
             animationController.UpdateIsBlocking(isBlocking);
             animationController.UpdateAttackInput(hitCount);
             animationController.SetMoveDirection(_moveInput.x);
+            if (_dashCooldown < 0.8f) animationController.UpdateIsDashing(false);
             if (FindOther() != null) animationController.TurnToFace(FindOther().gameObject.transform);
         }
         

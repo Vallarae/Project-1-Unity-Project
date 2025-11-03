@@ -16,19 +16,26 @@ public class AnimationController : MonoBehaviour {
 
     public void SetMoveDirection(float value) {
         if (animator == null) return;
-        
-        float rotation = transform.rotation.y;
 
-        float newValue = rotation == -90 ? -value : value;
+        float rotation = animator.transform.rotation.eulerAngles.y;
+        Debug.Log(rotation);
+
+        float newValue = rotation == 90 ? value : -value;
         
         animator.SetFloat("DirectionMoving", newValue);
     }
 
-    public void SetYVelocity(float value) {
+    public void SetYVelocity(float value)
+    {
         if (animator == null) return;
         animator.SetFloat("yVelocity", value);
     }
-
+    
+    public void UpdateIsDashing(bool value)
+    {
+        if (animator == null) return;
+        animator.SetBool("IsDashing", value);
+    }
     public void UpdateAttackInput(int attackIndex) {
         if (animator == null) return;
         animator.SetInteger("AttackIndex", attackIndex);

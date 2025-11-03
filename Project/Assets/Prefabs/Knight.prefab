@@ -253,22 +253,6 @@ MonoBehaviour:
     m_ActionId: db617113-f333-4382-a4d2-54acebf41b32
     m_ActionName: 'Player/Ability[/Keyboard/l,/XInputControllerWindows/leftShoulder]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -5691579512763993768}
-        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
-        m_MethodName: onUltimate
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 75595f8a-7889-4b66-8314-eba20f5ae371
-    m_ActionName: 'Player/Ultimate[/Keyboard/i,/XInputControllerWindows/buttonNorth]'
-  - m_PersistentCalls:
       m_Calls: []
     m_ActionId: c95b2375-e6d9-4b88-9c4c-c5e76515df4b
     m_ActionName: 'UI/Navigate[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
@@ -343,28 +327,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 3
   jumpHeight: 2
-  dashForce: {x: 3, y: 2, z: 0}
-  dashCooldown: 4
+  dashForce: {x: 15, y: 2, z: 0}
+  dashCooldown: 1
   lightAttackDamage: 3
   lightAttackStunDuration: 0.25
-  lightAttackKnockbackForce: 3
+  lightAttackKnockbackForce: 9
   lightAttackCooldownDuration: 0.25
   lightAttackSound: {fileID: 0}
   heavyAttackDamage: 5
   heavyAttackHoldTime: 0.3
   heavyAttackStunDuration: 0.75
-  heavyAttackKnockbackForce: 5
+  heavyAttackKnockbackForce: 12
   heavyAttackCooldownDuration: 0.5
   heavyAttackSound: {fileID: 0}
-  hitbox: {x: 5, y: 3, z: 0}
+  hitbox: {x: 7, y: 3, z: 0}
   blockCooldown: 3
   maxBlockHoldTime: 2
   blockAfterAttackCooldown: 0.2
   blockSound: {fileID: 0}
   maxHealth: 100
   takeDamageSound: {fileID: 0}
-  ultimateCooldownDuration: 100
-  showInputVariables: 0
+  showInputVariables: 1
   _moveInput: {x: 0, y: 0}
   _jumpButtonDown: 0
   _dashButtonDown: 0
@@ -372,6 +355,7 @@ MonoBehaviour:
   _blockKeyDown: 0
   _abilityKeyDown: 0
   _ultimateKeyDown: 0
+  canMove: 1
   showInputValues: 0
   abilityHitboxSize: {x: 2, y: 2, z: 2}
   abilityPositionOffset: {x: 0, y: 0, z: 1}
