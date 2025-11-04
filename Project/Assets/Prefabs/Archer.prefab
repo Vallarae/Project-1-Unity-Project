@@ -325,19 +325,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23ebd72acdf4dcdaf1a9314d7e3fbe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCode.Characters.Archer.ArcherScripts
-  walkSpeed: 3
+  walkSpeed: 4
   jumpHeight: 2
   dashForce: {x: 15, y: 15, z: 0}
   dashCooldown: 1
   lightAttackDamage: 3
   lightAttackStunDuration: 0.25
-  lightAttackKnockbackForce: 3
+  lightAttackKnockbackForce: 9
   lightAttackCooldownDuration: 0.25
   lightAttackSound: {fileID: 0}
   heavyAttackDamage: 5
   heavyAttackHoldTime: 0.3
   heavyAttackStunDuration: 0.75
-  heavyAttackKnockbackForce: 5
+  heavyAttackKnockbackForce: 12
   heavyAttackCooldownDuration: 0.5
   heavyAttackSound: {fileID: 0}
   hitbox: {x: 5, y: 5, z: 0}

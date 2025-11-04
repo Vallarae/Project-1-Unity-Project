@@ -78,11 +78,11 @@ namespace Editor {
             _lightAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.lightAttackCooldownDuration));
             _lightAttackSoundField = serializedObject.FindProperty(nameof(_controller.lightAttackSound));
             
-            _heavyAttackDamageField = serializedObject.FindProperty(nameof(_controller.lightAttackDamage));
-            _heavyAttackStunDurationField = serializedObject.FindProperty(nameof(_controller.lightAttackStunDuration));
-            _heavyAttackKnockbackForceField = serializedObject.FindProperty(nameof(_controller.lightAttackKnockbackForce));
-            _heavyAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.lightAttackCooldownDuration));
-            _heavyAttackSoundField = serializedObject.FindProperty(nameof(_controller.lightAttackSound));
+            _heavyAttackDamageField = serializedObject.FindProperty(nameof(_controller.heavyAttackDamage));
+            _heavyAttackStunDurationField = serializedObject.FindProperty(nameof(_controller.heavyAttackStunDuration));
+            _heavyAttackKnockbackForceField = serializedObject.FindProperty(nameof(_controller.heavyAttackKnockbackForce));
+            _heavyAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.heavyAttackCooldownDuration));
+            _heavyAttackSoundField = serializedObject.FindProperty(nameof(_controller.heavyAttackSound));
             
             _arrowField = serializedObject.FindProperty(nameof(_controller.arrow));
             _hitRequirementField = serializedObject.FindProperty(nameof(_controller.hitRequirement));

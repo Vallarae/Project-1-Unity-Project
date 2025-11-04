@@ -131,10 +131,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9b62df6f00433a85a48198ff31fcd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCode.Characters.Archer.Arrow
-  arrowSpeed: 5
+  arrowSpeed: 15
   detectRadius: 0.3
   offsetDistance: 0.41
-  damage: 10
+  damage: 8
   stunDuration: 4
   knockback: 0
   owner: {fileID: 0}

@@ -329,12 +329,12 @@ MonoBehaviour:
   jumpHeight: 2
   dashForce: {x: 15, y: 15, z: 0}
   dashCooldown: 1
-  lightAttackDamage: 3
+  lightAttackDamage: 4
   lightAttackStunDuration: 0.25
   lightAttackKnockbackForce: 9
   lightAttackCooldownDuration: 0.25
   lightAttackSound: {fileID: 0}
-  heavyAttackDamage: 5
+  heavyAttackDamage: 45
   heavyAttackHoldTime: 0.3
   heavyAttackStunDuration: 0.75
   heavyAttackKnockbackForce: 12
@@ -363,10 +363,10 @@ MonoBehaviour:
   animationTime: 1
   abilityDurationTime: 2
   maxHitCount: 7
-  abilityDamage: 15
+  abilityDamage: 30
   abilityStunTime: 3
   abilityKnockbackForce: 10
-  _abilityHitCount: 0
+  _abilityHitCount: 12
 --- !u!114 &2161116501663090836
 MonoBehaviour:
   m_ObjectHideFlags: 0
