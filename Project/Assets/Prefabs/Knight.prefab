@@ -104,7 +104,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1300956621301685895}
-  m_Material: {fileID: 13400000, guid: f2cb0e02f19a17543b59cfde9ccebaac, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -117,9 +117,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.633365
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.18710817, z: 0}
 --- !u!54 &5609979028738918677
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -207,8 +207,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -5691579512763993768}
-        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
-        m_MethodName: onAttack
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Knight.KnightScript, Assembly-CSharp
+        m_MethodName: OnAttack
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -223,8 +223,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -5691579512763993768}
-        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
-        m_MethodName: onBlock
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Knight.KnightScript, Assembly-CSharp
+        m_MethodName: OnBlock
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -239,8 +239,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -5691579512763993768}
-        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
-        m_MethodName: onAbility
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Knight.KnightScript, Assembly-CSharp
+        m_MethodName: OnAbility
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -340,7 +340,7 @@ MonoBehaviour:
   heavyAttackKnockbackForce: 12
   heavyAttackCooldownDuration: 0.5
   heavyAttackSound: {fileID: 0}
-  hitbox: {x: 7, y: 3, z: 0}
+  hitbox: {x: 3.82, y: 3, z: 0}
   blockCooldown: 3
   maxBlockHoldTime: 2
   blockAfterAttackCooldown: 0.2
@@ -348,13 +348,13 @@ MonoBehaviour:
   maxHealth: 100
   takeDamageSound: {fileID: 0}
   showInputVariables: 1
-  _moveInput: {x: 0, y: 0}
-  _jumpButtonDown: 0
-  _dashButtonDown: 0
-  _attackKeyDown: 0
-  _blockKeyDown: 0
-  _abilityKeyDown: 0
-  _ultimateKeyDown: 0
+  moveInput: {x: 0, y: 0}
+  jumpButtonDown: 0
+  dashButtonDown: 0
+  attackKeyDown: 0
+  blockKeyDown: 0
+  abilityKeyDown: 0
+  ultimateKeyDown: 0
   canMove: 1
   showInputValues: 0
   abilityHitboxSize: {x: 2, y: 2, z: 2}
@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eca55ed302d64ff41adc97d51a1d1251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 7927324227868526354}
 --- !u!75 &3090071526637914363
 ConstantForce:
   m_ObjectHideFlags: 0
@@ -502,7 +502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.952
+      value: -1.009
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
       propertyPath: m_LocalPosition.z
@@ -540,6 +540,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knight Rig
       objectReference: {fileID: 0}
+    - target: {fileID: 3760634602735340620, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dc7429098572ef846849b66dbcc1716b, type: 2}
+    - target: {fileID: 5753175188795972996, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 60aeec05b8a0f2a499c4fd6b50f8f4ee, type: 2}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 63b03885013536c4ea5e90348d8aa863, type: 3}
     m_RemovedGameObjects: []

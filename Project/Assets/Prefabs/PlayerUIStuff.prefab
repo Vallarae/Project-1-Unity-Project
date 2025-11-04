@@ -874,7 +874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterOne: {fileID: 1300956621301685895, guid: 872c7437b7b91ef4b987478f787b2028, type: 3}
-  characterTwo: {fileID: 1300956621301685895, guid: 04c93ccb30d9d5d48a7f0957fd74d1dd, type: 3}
+  characterTwo: {fileID: 1300956621301685895, guid: d1dc28e17189eb043942edcf56796c2f, type: 3}
 --- !u!1001 &7775999392363942957
 PrefabInstance:
   m_ObjectHideFlags: 0

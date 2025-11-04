@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using PlayerCode.PlayerJoinSystem;
 
 namespace PlayerCode.BaseCode {
     [RequireComponent(typeof(Rigidbody))]
@@ -17,7 +18,7 @@ namespace PlayerCode.BaseCode {
         public float jumpHeight = 2f;
         public Vector3 dashForce = new Vector3(3, 2, 0);
         public float dashCooldown = 4f;
-        protected LayerMask groundMask;
+        private LayerMask _groundMask;
         
         public int lightAttackDamage = 3;
         public float lightAttackStunDuration = 0.25f;
@@ -42,42 +43,40 @@ namespace PlayerCode.BaseCode {
         public int maxHealth = 100;
 
         public AudioClip takeDamageSound;
-
-        protected float ultimateCooldownDuration = 100f;
-        [NonSerialized] public bool canUseAbility = false;
+        
+        [NonSerialized] protected bool canUseAbility = false;
         
         public bool showInputVariables;
 
         //stores the player inputs into variables
-        public Vector2 _moveInput;
-        public bool _jumpButtonDown;
-        public bool _dashButtonDown;
-        public bool _attackKeyDown;
-        public bool _blockKeyDown;
-        public bool _abilityKeyDown;
-        public bool _ultimateKeyDown;
+        public Vector2 moveInput;
+        public bool jumpButtonDown;
+        public bool dashButtonDown;
+        public bool attackKeyDown;
+        public bool blockKeyDown;
+        public bool abilityKeyDown;
+        public bool ultimateKeyDown;
 
         private float _holdAttackTime;
         private float _holdBlockTime;
 
-        private int hitCount;
-        private bool hasAirAttacked;
+        private int _hitCount;
+        private bool _hasAirAttacked;
         public bool canMove;
 
         //references
         protected Rigidbody rb;
-        protected AudioSource audioSource;
+        private AudioSource _audioSource;
         protected AnimationController animationController;
 
         //for other scripts
-        [NonSerialized] public bool isBlocking = false;
+        [NonSerialized] public bool isBlocking;
 
         //cooldown handling
         private float _attackCooldown;
         private float _timeSinceLastHit;
         private float _blockCooldown;
         private float _stunDuration;
-        private float _ultimateCooldown;
         private float _dashCooldown;
 
         //other variables
@@ -97,18 +96,17 @@ namespace PlayerCode.BaseCode {
             Initialise();
         }
         
-        //moved into seperate class incase start breaks again
+        //moved into separate class in case start breaks again
         protected void Initialise()
         {
             rb = GetComponent<Rigidbody>();
-            audioSource = GetComponent<AudioSource>();
+            _audioSource = GetComponent<AudioSource>();
             animationController = GetComponent<AnimationController>();
 
             rb.constraints = RigidbodyConstraints.FreezePositionZ;
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-            groundMask = LayerMask.GetMask("Ground");
-
-            _ultimateCooldown = ultimateCooldownDuration;
+            _groundMask = LayerMask.GetMask("Ground");
+            
             _currentHealth = maxHealth;
 
             PlayerLookupMap.AddPlayer(GetComponent<Collider>(), this);
@@ -117,11 +115,11 @@ namespace PlayerCode.BaseCode {
         }
 
         private void Update() {
-            onUpdate();
+            OnUpdate();
         }
 
         //to make it work in inheriting scripts
-        protected void onUpdate() {
+        protected void OnUpdate() {
             HandleCooldowns();
             UpdateAnimationValues();
             HandleHealthBar();
@@ -176,7 +174,6 @@ namespace PlayerCode.BaseCode {
 
             foreach (PlayerInfo player in PlayerManager.instance.players)
             {
-                int index = PlayerManager.instance.players.IndexOf(player);
                 player.selectedCharacter = null;
                 players.Add(player);
             }
@@ -191,31 +188,31 @@ namespace PlayerCode.BaseCode {
         #region Input Methods
 
         public void OnMove(InputAction.CallbackContext cc) {
-            _moveInput = cc.ReadValue<Vector2>();
+            moveInput = cc.ReadValue<Vector2>();
         }
 
         public void OnJump(InputAction.CallbackContext cc) {
-            _jumpButtonDown = cc.performed;
+            jumpButtonDown = cc.performed;
         }
 
         public void OnDash(InputAction.CallbackContext cc) {
-            _dashButtonDown = cc.performed;
+            dashButtonDown = cc.performed;
         }
 
-        public void onAttack(InputAction.CallbackContext cc) {
-            _attackKeyDown = cc.performed;
+        public void OnAttack(InputAction.CallbackContext cc) {
+            attackKeyDown = cc.performed;
         }
 
-        public void onBlock(InputAction.CallbackContext cc) {
-            _blockKeyDown = cc.performed;
+        public void OnBlock(InputAction.CallbackContext cc) {
+            blockKeyDown = cc.performed;
         }
 
-        public void onAbility(InputAction.CallbackContext cc) {
-            _abilityKeyDown = cc.performed;
+        public void OnAbility(InputAction.CallbackContext cc) {
+            abilityKeyDown = cc.performed;
         }
 
-        public void onUltimate(InputAction.CallbackContext cc) {
-            _ultimateKeyDown = cc.performed;
+        public void OnUltimate(InputAction.CallbackContext cc) {
+            ultimateKeyDown = cc.performed;
         }
 
         #endregion
@@ -223,25 +220,25 @@ namespace PlayerCode.BaseCode {
         #region Movement Methods
 
         protected virtual void HandleMovement() {
-            rb.linearVelocity = new Vector3(_moveInput.x * walkSpeed, rb.linearVelocity.y, 0);
+            rb.linearVelocity = new Vector3(moveInput.x * walkSpeed, rb.linearVelocity.y, 0);
             Vector3 position = transform.position;
             position.z = 0;
             transform.position = position;
 
-            animationController.SetXMovementValue(_moveInput.magnitude);
+            animationController.SetXMovementValue(moveInput.magnitude);
         }
 
         protected virtual void HandleJump() {
-            if (!(_jumpButtonDown && isGrounded)) return;
+            if (!(jumpButtonDown && isGrounded)) return;
 
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
         }
 
         protected virtual void HandleDash() {
-            if (!_dashButtonDown || _dashCooldown > 0) return;
+            if (!dashButtonDown || _dashCooldown > 0) return;
 
             _dashCooldown = dashCooldown;
-            rb.AddForce(_moveInput * dashForce, ForceMode.Impulse);
+            rb.AddForce(moveInput * dashForce, ForceMode.Impulse);
             animationController.UpdateIsDashing(true);
         }
 
@@ -250,13 +247,7 @@ namespace PlayerCode.BaseCode {
         #region Combat Methods
 
         protected virtual void CombatManager() {
-            if (_ultimateKeyDown && _ultimateCooldown < 0) {
-                Ultimate();
-                _state = CombatState.Ultimate;
-                return;
-            }
-
-            if (_abilityKeyDown && canUseAbility) {
+            if (abilityKeyDown && canUseAbility) {
                 Ability();
                 _state = CombatState.Ability;
                 return;
@@ -282,6 +273,8 @@ namespace PlayerCode.BaseCode {
 
         protected virtual void Attack() {
             if (_attackCooldown > 0) return;
+            
+            animationController.OnPunchAttempt();
 
             bool isLightAttack = _holdAttackTime < heavyAttackHoldTime;
 
@@ -290,17 +283,17 @@ namespace PlayerCode.BaseCode {
 
             _holdAttackTime = 0f;
 
-            audioSource.PlayOneShot(isLightAttack ? lightAttackSound : heavyAttackSound);
+            _audioSource.PlayOneShot(isLightAttack ? lightAttackSound : heavyAttackSound);
 
             Stun(0.1f);
 
-            if (!isGrounded) hasAirAttacked = true;
+            if (!isGrounded) _hasAirAttacked = true;
 
-            BasePlayerController target = Hitbox(transform.position, hitbox);
-            if (target == null) return;
+            BasePlayerController target = Hitbox();
+            if (ReferenceEquals(target, null)) return;
 
             if (isLightAttack && target.isBlocking) {
-                target.audioSource.PlayOneShot(target.blockSound);
+                target._audioSource.PlayOneShot(target.blockSound);
                 _attackCooldown = 1.5f;
 
                 Vector3 direction =
@@ -314,12 +307,12 @@ namespace PlayerCode.BaseCode {
                 return;
             }
 
-            hitCount++;
+            _hitCount++;
             _timeSinceLastHit = 0;
 
-            ApplyAttack(target, data, hitCount >= 4);
+            ApplyAttack(target, data, _hitCount >= 4);
 
-            if (hitCount >= 4) { 
+            if (_hitCount >= 4) { 
                 _attackCooldown = 1.5f; 
             }
         }
@@ -327,13 +320,13 @@ namespace PlayerCode.BaseCode {
         private AttackData GetAttackData(bool isLight) {
             return isLight
                 ? new AttackData(lightAttackDamage, lightAttackKnockbackForce, lightAttackStunDuration,
-                    lightAttackCooldownDuration, isLight)
+                    lightAttackCooldownDuration, true)
                 : new AttackData(heavyAttackDamage, heavyAttackKnockbackForce, heavyAttackStunDuration,
-                    heavyAttackCooldownDuration, isLight);
+                    heavyAttackCooldownDuration, false);
         }
 
         protected void ApplyAttack(BasePlayerController target, AttackData data, bool doesHeavyKnockback = false) {
-            target.audioSource.PlayOneShot(target.takeDamageSound);
+            target._audioSource.PlayOneShot(target.takeDamageSound);
 
             Vector3 direction =
                 target.gameObject.transform.position
@@ -353,9 +346,9 @@ namespace PlayerCode.BaseCode {
         protected BasePlayerController Hitbox()
         {
             Collider[] collidersInRange = Physics.OverlapBox(transform.position, hitbox / 2);
-            foreach (Collider collider in collidersInRange)
+            foreach (Collider curCollider in collidersInRange)
             {
-                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
+                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(curCollider);
                 if (controllerToCheck == null) continue;
                 if (controllerToCheck == this) continue;
 
@@ -365,10 +358,10 @@ namespace PlayerCode.BaseCode {
             return null;
         }
         
-        protected BasePlayerController Hitbox(Vector3 offset, Vector3 size) {
+        private BasePlayerController Hitbox(Vector3 offset, Vector3 size) {
             Collider[] collidersInRange = Physics.OverlapBox(transform.position + offset, size / 2);
-            foreach (Collider collider in collidersInRange) {
-                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
+            foreach (Collider curCollider in collidersInRange) {
+                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(curCollider);
                 if (controllerToCheck == null) continue;
                 if (controllerToCheck == this) continue;
 
@@ -378,12 +371,12 @@ namespace PlayerCode.BaseCode {
             return null;
         }
 
-        protected BasePlayerController FindOther()
+        private BasePlayerController FindOther()
         {
-            Collider[] collidersInRange = Physics.OverlapBox(transform.position, hitbox * 2);
-            foreach (Collider collider in collidersInRange)
+            Collider[] collidersInRange = Physics.OverlapBox(transform.position, hitbox * 6);
+            foreach (Collider curCollider in collidersInRange)
             {
-                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(collider);
+                BasePlayerController controllerToCheck = PlayerLookupMap.GetPlayer(curCollider);
                 if (controllerToCheck == null) continue;
                 if (controllerToCheck == this) continue;
 
@@ -438,9 +431,9 @@ namespace PlayerCode.BaseCode {
 
         #region Check Methods
 
-        protected bool isGrounded => Physics.Raycast(transform.position, Vector3.down, 1.2f, groundMask);
-        protected bool canAttack => !_attackKeyDown && _holdAttackTime > 0 && _attackCooldown < 0 && _stunDuration < 0 && !hasAirAttacked;
-        protected bool canBlock => _blockKeyDown && _blockCooldown < 0 && _stunDuration < 0;
+        private bool isGrounded => Physics.Raycast(transform.position, Vector3.down, 1.5f, _groundMask);
+        private bool canAttack => !attackKeyDown && _holdAttackTime > 0 && _attackCooldown < 0 && _stunDuration < 0 && !_hasAirAttacked;
+        private bool canBlock => blockKeyDown && _blockCooldown < 0 && _stunDuration < 0;
 
         #endregion
 
@@ -450,32 +443,31 @@ namespace PlayerCode.BaseCode {
             _attackCooldown -= Time.deltaTime;
             _blockCooldown -= Time.deltaTime;
             _stunDuration -= Time.deltaTime;
-            _ultimateCooldown -= Time.deltaTime;
             _timeSinceLastHit += Time.deltaTime;
             _dashCooldown -= Time.deltaTime;
 
-            canMove = !_attackKeyDown;
+            canMove = !attackKeyDown;
 
-            if (_timeSinceLastHit > 0.65) hitCount = 0;
-            if (isGrounded && hasAirAttacked) _holdAttackTime = 0;
-            if (isGrounded) hasAirAttacked = false;
+            if (_timeSinceLastHit > 0.65) _hitCount = 0;
+            if (isGrounded && _hasAirAttacked) _holdAttackTime = 0;
+            if (isGrounded) _hasAirAttacked = false;
 
-            if (_attackKeyDown) _holdAttackTime += Time.deltaTime;
-            if (_blockKeyDown) _holdBlockTime += Time.deltaTime;
+            if (attackKeyDown) _holdAttackTime += Time.deltaTime;
+            if (blockKeyDown) _holdBlockTime += Time.deltaTime;
             else _holdBlockTime = 0;
         }
 
         private void UpdateAnimationValues() {
             animationController.SetYVelocity(rb.linearVelocity.y);
             animationController.UpdateIsBlocking(isBlocking);
-            animationController.UpdateAttackInput(hitCount);
-            animationController.SetMoveDirection(_moveInput.x);
+            animationController.UpdateAttackInput(_hitCount);
+            animationController.SetMoveDirection(moveInput.x);
             if (_dashCooldown < 0.8f) animationController.UpdateIsDashing(false);
-            if (FindOther() != null) animationController.TurnToFace(FindOther().gameObject.transform);
+            if (!ReferenceEquals(FindOther(), null)) animationController.TurnToFace(FindOther().gameObject.transform);
         }
         
         private void HandleHealthBar() {
-            if (healthBarUI == null) return;
+            if (ReferenceEquals(healthBarUI, null)) return;
             float value = (float) _currentHealth / maxHealth;
 
             healthBarUI.value = value;

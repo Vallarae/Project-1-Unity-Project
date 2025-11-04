@@ -1,56 +1,53 @@
 using System;
+using PlayerCode.PlayerJoinSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class CharacterSelectionUI : MonoBehaviour
-{
-    public GameObject characterOne;
-    public GameObject characterTwo;
+namespace MenuScripts.CharacterSelectionMenu {
+    public class CharacterSelectionUI : MonoBehaviour {
+        public GameObject characterOne;
+        public GameObject characterTwo;
 
-    public static int checkedIndex = 0;
+        public static int checkedIndex = 0;
 
-    //    int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
-    //input.SwitchCurrentControlScheme(player.controlScheme, player.device);
+        //    int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
+        //input.SwitchCurrentControlScheme(player.controlScheme, player.device);
 
-    private void Start()
-    {
-        PlayerInfo player = PlayerManager.instance.players[checkedIndex];
-        Debug.Log(checkedIndex);
+        private void Start() {
+            PlayerInfo player = PlayerManager.instance.players[checkedIndex];
+            Debug.Log(checkedIndex);
 
-        PlayerInput input = GetComponent<PlayerInput>();
-        input.SwitchCurrentControlScheme(player.controlScheme, player.device);
+            PlayerInput input = GetComponent<PlayerInput>();
+            input.SwitchCurrentControlScheme(player.controlScheme, player.device);
 
-        checkedIndex++;
-    }
-
-    private void Update()
-    {
-        foreach (PlayerInfo player in PlayerManager.instance.players)
-        {
-            if (player.selectedCharacter == null) return;
+            checkedIndex++;
         }
 
-        checkedIndex = 0;
+        private void Update() {
+            foreach (PlayerInfo player in PlayerManager.instance.players) {
+                if (player.selectedCharacter == null) return;
+            }
 
-        SceneManager.LoadScene(3);
-    }
+            checkedIndex = 0;
 
-    public void SelectCharacterOne()
-    {
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
+            SceneManager.LoadScene(3);
+        }
 
-        PlayerInfo playerInfo = PlayerManager.instance.players[index];
-        playerInfo.selectedCharacter = characterOne;
-    }
+        public void SelectCharacterOne() {
+            PlayerInput playerInput = GetComponent<PlayerInput>();
+            int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
 
-    public void SelectCharacterTwo()
-    {
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
+            PlayerInfo playerInfo = PlayerManager.instance.players[index];
+            playerInfo.selectedCharacter = characterOne;
+        }
 
-        PlayerInfo playerInfo = PlayerManager.instance.players[index];
-        playerInfo.selectedCharacter = characterTwo;
+        public void SelectCharacterTwo() {
+            PlayerInput playerInput = GetComponent<PlayerInput>();
+            int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
+
+            PlayerInfo playerInfo = PlayerManager.instance.players[index];
+            playerInfo.selectedCharacter = characterTwo;
+        }
     }
 }

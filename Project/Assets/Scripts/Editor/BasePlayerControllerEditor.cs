@@ -86,12 +86,12 @@ namespace Editor {
             _takeDamageSoundField = serializedObject.FindProperty(nameof(_controller.takeDamageSound));
 
             _showInputValuesField = serializedObject.FindProperty(nameof(_controller.showInputVariables));
-            _moveInputField = serializedObject.FindProperty(nameof(_controller._moveInput));
-            _jumpButtonDownField = serializedObject.FindProperty(nameof(_controller._jumpButtonDown));
-            _dashButtonDownField = serializedObject.FindProperty(nameof(_controller._dashButtonDown));
-            _attackButtonDownField = serializedObject.FindProperty(nameof(_controller._attackKeyDown));
-            _blockButtonDownField = serializedObject.FindProperty(nameof(_controller._blockKeyDown));
-            _abilityButtonDownField = serializedObject.FindProperty(nameof(_controller._abilityKeyDown));
+            _moveInputField = serializedObject.FindProperty(nameof(_controller.moveInput));
+            _jumpButtonDownField = serializedObject.FindProperty(nameof(_controller.jumpButtonDown));
+            _dashButtonDownField = serializedObject.FindProperty(nameof(_controller.dashButtonDown));
+            _attackButtonDownField = serializedObject.FindProperty(nameof(_controller.attackKeyDown));
+            _blockButtonDownField = serializedObject.FindProperty(nameof(_controller.blockKeyDown));
+            _abilityButtonDownField = serializedObject.FindProperty(nameof(_controller.abilityKeyDown));
         }
 
         public override void OnInspectorGUI() {

@@ -1,16 +1,11 @@
 using PlayerCode.BaseCode;
-using UnityEngine;
 
-public class DummyScript : BasePlayerController {
-    protected override void HandleMovement() { 
-        
-    }
+namespace PlayerCode.Characters.Dummy {
+    public class DummyScript : BasePlayerController {
+        protected override void HandleMovement() { }
 
-    protected override void HandleJump() {
-       
-    }
+        protected override void HandleJump() { }
 
-    protected override void CombatManager() {
-        
+        protected override void CombatManager() { }
     }
 }
