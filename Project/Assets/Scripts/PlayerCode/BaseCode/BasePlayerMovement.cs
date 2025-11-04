@@ -325,7 +325,7 @@ namespace PlayerCode.BaseCode {
                     heavyAttackCooldownDuration, false);
         }
 
-        protected void ApplyAttack(BasePlayerController target, AttackData data, bool doesHeavyKnockback = false) {
+        public void ApplyAttack(BasePlayerController target, AttackData data, bool doesHeavyKnockback = false) {
             target._audioSource.PlayOneShot(target.takeDamageSound);
 
             Vector3 direction =

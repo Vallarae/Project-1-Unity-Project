@@ -39,7 +39,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7251061862311820377}
-  - {fileID: 4033082875896511311}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1229756507160959108
@@ -175,8 +174,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
+      - m_Target: {fileID: 8138604025988684081}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Archer.ArcherScripts, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -191,8 +190,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Move[/XInputControllerWindows/leftStick,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
+      - m_Target: {fileID: 8138604025988684081}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Archer.ArcherScripts, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
@@ -207,8 +206,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.Knight.KnightScript, Assembly-CSharp
+      - m_Target: {fileID: 8138604025988684081}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Archer.ArcherScripts, Assembly-CSharp
         m_MethodName: OnAttack
         m_Mode: 0
         m_Arguments:
@@ -223,8 +222,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Keyboard/j,/XInputControllerWindows/buttonWest]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.Knight.KnightScript, Assembly-CSharp
+      - m_Target: {fileID: 8138604025988684081}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Archer.ArcherScripts, Assembly-CSharp
         m_MethodName: OnBlock
         m_Mode: 0
         m_Arguments:
@@ -239,8 +238,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Block[/Keyboard/k,/XInputControllerWindows/buttonEast]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerCode.Characters.Knight.KnightScript, Assembly-CSharp
+      - m_Target: {fileID: 8138604025988684081}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Archer.ArcherScripts, Assembly-CSharp
         m_MethodName: OnAbility
         m_Mode: 0
         m_Arguments:
@@ -295,8 +294,8 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: KnightScript, Assembly-CSharp
+      - m_Target: {fileID: 8138604025988684081}
+        m_TargetAssemblyTypeName: PlayerCode.Characters.Archer.ArcherScripts, Assembly-CSharp
         m_MethodName: OnDash
         m_Mode: 0
         m_Arguments:
@@ -328,8 +327,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCode.Characters.Archer.ArcherScripts
   walkSpeed: 3
   jumpHeight: 2
-  dashForce: {x: 3, y: 2, z: 0}
-  dashCooldown: 4
+  dashForce: {x: 15, y: 15, z: 0}
+  dashCooldown: 1
   lightAttackDamage: 3
   lightAttackStunDuration: 0.25
   lightAttackKnockbackForce: 3
@@ -341,14 +340,14 @@ MonoBehaviour:
   heavyAttackKnockbackForce: 5
   heavyAttackCooldownDuration: 0.5
   heavyAttackSound: {fileID: 0}
-  hitbox: {x: 0, y: 0, z: 0}
+  hitbox: {x: 5, y: 5, z: 0}
   blockCooldown: 3
   maxBlockHoldTime: 2
   blockAfterAttackCooldown: 0.2
   blockSound: {fileID: 0}
   maxHealth: 100
   takeDamageSound: {fileID: 0}
-  showInputVariables: 0
+  showInputVariables: 1
   moveInput: {x: 0, y: 0}
   jumpButtonDown: 0
   dashButtonDown: 0
@@ -358,10 +357,11 @@ MonoBehaviour:
   ultimateKeyDown: 0
   canMove: 0
   showInputValues: 0
-  arrow: {fileID: 0}
-  hitRequirement: 0
-  angleOffset: 12.14
+  arrow: {fileID: 5438085546973721410, guid: a8fa651aec3c7ec40aa2cfcd2c15bd3c, type: 3}
+  hitRequirement: 9
+  angleOffset: 9.25
   arrowSpawnerPoint: {fileID: 8819479166433112544}
+  _curHitCount: 17
 --- !u!114 &2161116501663090836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,13 +508,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8819479166433112544}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.10574342, y: -0, z: -0, w: 0.99439347}
-  m_LocalPosition: {x: 0, y: 0.383, z: 0.398}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.392, z: 0.398}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9061339739533694324}
-  m_LocalEulerAnglesHint: {x: -3.741, y: 0, z: 0}
+  m_Father: {fileID: 7251061862311820377}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7145606385051835314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -577,7 +577,10 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 95d1d57fd90334942a3c302e065ea31e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 39e02a49b379d8c44866c279abea64a9, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 4033082875896511311}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 39e02a49b379d8c44866c279abea64a9, type: 3}
       insertIndex: -1

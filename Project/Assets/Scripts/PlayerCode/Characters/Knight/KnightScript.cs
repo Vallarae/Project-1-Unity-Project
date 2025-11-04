@@ -15,7 +15,7 @@ namespace PlayerCode.Characters.Knight {
         public float abilityStunTime = 3f;
         public float abilityKnockbackForce = 10f;
 
-        private int _abilityHitCount = 0;
+        public int _abilityHitCount = 0;
         private bool _inAbility = false;
         private float _abilityDuration = 0f;
 
@@ -26,12 +26,21 @@ namespace PlayerCode.Characters.Knight {
 
         protected void Update() {
             OnUpdate();
+            
+            if (_abilityHitCount >= maxHitCount) {
+                canUseAbility = true;
+            }
+            else {
+                canUseAbility = false;
+            }
 
             if (_inAbility) {
                 _abilityDuration += Time.deltaTime;
+                canMove = false;
                 if (_abilityDuration >= abilityDurationTime) {
                     _inAbility = false;
                     _abilityDuration = 0f;
+                    canMove = true;
                     return;
                 }
 
@@ -45,6 +54,7 @@ namespace PlayerCode.Characters.Knight {
                 if (hitEnemy.isBlocking) return;
 
                 ApplyAttack(hitEnemy, attackData, true);
+                _inAbility = false;
             }
         }
 
@@ -53,7 +63,7 @@ namespace PlayerCode.Characters.Knight {
         //     Gizmos.color = Color.blue;
         //     Gizmos.DrawWireCube(transform.position + (transform.forward * abilityPositionOffset.x), abilityHitboxSize);
         // }
-
+        
         //Dash forwards that does damage and stuns enemies
         protected override void Ability() {
             rb.AddForce(moveInput * abilityDashForce, ForceMode.Impulse);
@@ -66,10 +76,6 @@ namespace PlayerCode.Characters.Knight {
         protected override void Attack() {
             base.Attack();
             _abilityHitCount++;
-
-            if (_abilityHitCount >= maxHitCount) {
-                canUseAbility = true;
-            }
         }
 
         private void FinishAniamtion() {

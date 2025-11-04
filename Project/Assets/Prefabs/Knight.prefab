@@ -327,7 +327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 3
   jumpHeight: 2
-  dashForce: {x: 15, y: 2, z: 0}
+  dashForce: {x: 15, y: 15, z: 0}
   dashCooldown: 1
   lightAttackDamage: 3
   lightAttackStunDuration: 0.25
@@ -359,13 +359,14 @@ MonoBehaviour:
   showInputValues: 0
   abilityHitboxSize: {x: 2, y: 2, z: 2}
   abilityPositionOffset: {x: 0, y: 0, z: 1}
-  abilityDashForce: {x: 20, y: 20, z: 0}
+  abilityDashForce: {x: 50, y: 50, z: 0}
   animationTime: 1
   abilityDurationTime: 2
   maxHitCount: 7
   abilityDamage: 15
   abilityStunTime: 3
   abilityKnockbackForce: 10
+  _abilityHitCount: 0
 --- !u!114 &2161116501663090836
 MonoBehaviour:
   m_ObjectHideFlags: 0
