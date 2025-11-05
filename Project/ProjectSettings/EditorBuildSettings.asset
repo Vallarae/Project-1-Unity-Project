@@ -15,8 +15,11 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuScenes/SelectCharacter.unity
     guid: a51401c66c65b3244a93752c8fe57bb9
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Game/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Game/WinScreen.unity
+    guid: 1fc8fb680cc2733418a53cf16b9e2701
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

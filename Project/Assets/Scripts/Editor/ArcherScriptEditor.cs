@@ -31,6 +31,9 @@ namespace Editor {
         private SerializedProperty _heavyAttackKnockbackForceField;
         private SerializedProperty _heavyAttackCooldownDurationField;
         private SerializedProperty _heavyAttackSoundField;
+        
+        private SerializedProperty _ragdollField;
+        private SerializedProperty _fadeInField;
 
         //Ability Settings Variables
         private SerializedProperty _arrowField;
@@ -89,6 +92,9 @@ namespace Editor {
             _angleOffsetField = serializedObject.FindProperty(nameof(_controller.angleOffset));
             _arrowSpawnerPointField = serializedObject.FindProperty(nameof(_controller.arrowSpawnerPoint));
 
+            _ragdollField = serializedObject.FindProperty(nameof(_controller.ragdollObject));
+            _fadeInField = serializedObject.FindProperty(nameof(_controller.fadeInObject));
+            
             _hitBoxField = serializedObject.FindProperty(nameof(_controller.hitbox));
             
             _blockCooldownField = serializedObject.FindProperty(nameof(_controller.blockCooldown));
@@ -156,6 +162,9 @@ namespace Editor {
                 case 6:
                     EditorGUILayout.PropertyField(_maxHealthField);
                     EditorGUILayout.PropertyField(_takeDamageSoundField);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.PropertyField(_ragdollField);
+                    EditorGUILayout.PropertyField(_fadeInField);
                     break;
                 case 7:
                     EditorGUILayout.PropertyField(_showInputValuesField);

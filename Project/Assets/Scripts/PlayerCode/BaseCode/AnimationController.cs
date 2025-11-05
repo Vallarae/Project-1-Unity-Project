@@ -16,7 +16,7 @@ namespace PlayerCode.BaseCode {
 
         private void Start() {
             animator = GetComponent<Animator>();
-            if (ReferenceEquals(animator, null)) return; animator = GetComponentInChildren<Animator>();
+            if (ReferenceEquals(animator, null)) animator = GetComponentInChildren<Animator>();
         }
 
         public void SetXMovementValue(float value) {
@@ -80,6 +80,10 @@ namespace PlayerCode.BaseCode {
             float difference = transform.position.x - position.position.x;
 
             transform.rotation = Quaternion.Euler(0, difference > 0 ? -90 : 90, 0);
+        }
+
+        public void HideAnimatedObject() {
+            animator.gameObject.SetActive(false);
         }
 
         private void OnHitTakeStart() {

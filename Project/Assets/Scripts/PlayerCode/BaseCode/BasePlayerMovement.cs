@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using PlayerCode.PlayerJoinSystem;
+using UnityEngine.SceneManagement;
 
 namespace PlayerCode.BaseCode {
     [RequireComponent(typeof(Rigidbody))]
@@ -39,10 +41,14 @@ namespace PlayerCode.BaseCode {
         public float maxBlockHoldTime = 2f;
         public float blockAfterAttackCooldown = 0.2f;
         public AudioClip blockSound;
+
+        public GameObject ragdollObject;
         
         public int maxHealth = 100;
 
         public AudioClip takeDamageSound;
+
+        public GameObject fadeInObject;
         
         [NonSerialized] protected bool canUseAbility = false;
         
@@ -57,6 +63,8 @@ namespace PlayerCode.BaseCode {
         public bool abilityKeyDown;
         public bool ultimateKeyDown;
 
+        public int playerId;
+        
         private float _holdAttackTime;
         private float _holdBlockTime;
 
@@ -180,7 +188,7 @@ namespace PlayerCode.BaseCode {
 
             PlayerManager.instance.players = players;
 
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(4);
         }
 
         #endregion
@@ -414,7 +422,7 @@ namespace PlayerCode.BaseCode {
             animationController.OnHitTake();
 
             if (_currentHealth <= 0) {
-                Destroy(this.gameObject);
+                OnDeath();
             }
         }
 
@@ -427,6 +435,25 @@ namespace PlayerCode.BaseCode {
             isBlocking = false;
         }
 
+        protected virtual void OnDeath() {
+            Stun(15); //extra time to be safe
+            GetComponent<Collider>().enabled = false;
+            animationController.HideAnimatedObject();
+
+            PlayerInfo playerInfo = PlayerManager.instance.players[playerId];
+            playerInfo.isLoser = true;
+            PlayerManager.instance.players[playerId] = playerInfo;
+            
+            Instantiate(fadeInObject);
+            Instantiate(ragdollObject, transform.position + transform.up * 1.5f, transform.rotation);
+            //Ragdoll animation here
+            StartCoroutine(OnDeathRoutine());
+        }
+
+        protected virtual IEnumerator OnDeathRoutine() {
+            yield return new WaitForSeconds(6f);
+            Destroy(this.gameObject);
+        }
         #endregion
 
         #region Check Methods

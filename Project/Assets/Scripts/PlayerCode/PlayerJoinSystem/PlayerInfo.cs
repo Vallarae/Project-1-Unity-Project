@@ -6,6 +6,7 @@ namespace PlayerCode.PlayerJoinSystem {
     public class PlayerInfo {
         public int playerIndex;
         public int deviceId;
+        public bool isLoser = false;
         public InputDevice device;
         public string controlScheme;
         public GameObject selectedCharacter;

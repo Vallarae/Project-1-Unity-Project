@@ -14,6 +14,7 @@ namespace ObjectCode.PlayerJoinObjects {
         public Transform spawnPositionTwo;
 
         private void Start() {
+            int index = 0;
             foreach (PlayerInfo player in PlayerManager.instance.players) {
                 Transform currentSpawnPosition = spawnPositionOne != null ? spawnPositionOne : spawnPositionTwo;
                 spawnPositionOne = null;
@@ -29,6 +30,8 @@ namespace ObjectCode.PlayerJoinObjects {
                 healthBarPlayerOne = null;
 
                 controller.healthBarUI = sliderToUse;
+                controller.playerId = index;
+                index++;
             }
         }
     }

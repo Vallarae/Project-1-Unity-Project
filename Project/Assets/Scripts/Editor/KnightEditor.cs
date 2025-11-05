@@ -41,6 +41,10 @@ namespace Editor {
         private SerializedProperty _abilityStunTime;
         private SerializedProperty _abilityKnockbackForceField;
         
+        //Ragdoll Variables
+        private SerializedProperty _ragdollField;
+        private SerializedProperty _fadeInField;
+        
         //Hitbox Settings Variables
         private SerializedProperty _hitBoxField;
         
@@ -87,6 +91,9 @@ namespace Editor {
             _heavyAttackKnockbackForceField = serializedObject.FindProperty(nameof(_controller.heavyAttackKnockbackForce));
             _heavyAttackCooldownDurationField = serializedObject.FindProperty(nameof(_controller.heavyAttackCooldownDuration));
             _heavyAttackSoundField = serializedObject.FindProperty(nameof(_controller.heavyAttackSound));
+
+            _ragdollField = serializedObject.FindProperty(nameof(_controller.ragdollObject));
+            _fadeInField = serializedObject.FindProperty(nameof(_controller.fadeInObject));
             
             _abilityHitboxSizeField = serializedObject.FindProperty(nameof(_controller.abilityHitboxSize));
             _abilityPositionOffsetField = serializedObject.FindProperty(nameof(_controller.abilityPositionOffset));
@@ -175,6 +182,9 @@ namespace Editor {
                 case 6:
                     EditorGUILayout.PropertyField(_maxHealthField);
                     EditorGUILayout.PropertyField(_takeDamageSoundField);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.PropertyField(_ragdollField);
+                    EditorGUILayout.PropertyField(_fadeInField);
                     break;
                 case 7:
                     EditorGUILayout.PropertyField(_showInputValuesField);

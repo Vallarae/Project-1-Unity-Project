@@ -34,7 +34,7 @@ Transform:
   m_GameObject: {fileID: 1300956621301685895}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.2, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -329,12 +329,12 @@ MonoBehaviour:
   jumpHeight: 2
   dashForce: {x: 15, y: 15, z: 0}
   dashCooldown: 1
-  lightAttackDamage: 3
+  lightAttackDamage: 4
   lightAttackStunDuration: 0.25
   lightAttackKnockbackForce: 9
   lightAttackCooldownDuration: 0.25
   lightAttackSound: {fileID: 0}
-  heavyAttackDamage: 5
+  heavyAttackDamage: 7
   heavyAttackHoldTime: 0.3
   heavyAttackStunDuration: 0.75
   heavyAttackKnockbackForce: 12
@@ -345,8 +345,10 @@ MonoBehaviour:
   maxBlockHoldTime: 2
   blockAfterAttackCooldown: 0.2
   blockSound: {fileID: 0}
+  ragdollObject: {fileID: 4288612462855824267, guid: f4a4b081587fd5e49a4b66196dfb9bea, type: 3}
   maxHealth: 100
   takeDamageSound: {fileID: 0}
+  fadeInObject: {fileID: 4666860297364869054, guid: 63bf9e1298c7fe144a1c0e1505f6242a, type: 3}
   showInputVariables: 1
   moveInput: {x: 0, y: 0}
   jumpButtonDown: 0
@@ -355,6 +357,7 @@ MonoBehaviour:
   blockKeyDown: 0
   abilityKeyDown: 0
   ultimateKeyDown: 0
+  playerId: 0
   canMove: 0
   showInputValues: 0
   arrow: {fileID: 5438085546973721410, guid: a8fa651aec3c7ec40aa2cfcd2c15bd3c, type: 3}
