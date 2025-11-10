@@ -54,6 +54,9 @@ namespace PlayerCode.BaseCode {
         
         public bool showInputVariables;
 
+        public Texture2D abilityIcon;
+        private Texture2D _darkAbilityIcon;
+
         //stores the player inputs into variables
         public Vector2 moveInput;
         public bool jumpButtonDown;
@@ -91,6 +94,7 @@ namespace PlayerCode.BaseCode {
         private int _currentHealth;
         private CombatState _state = CombatState.Normal;
         [NonSerialized] public Slider healthBarUI;
+        [NonSerialized] public RawImage abilityIconDisplay;
         
         //editor values -> might not be needed
         public bool showInputValues;
@@ -120,6 +124,8 @@ namespace PlayerCode.BaseCode {
             PlayerLookupMap.AddPlayer(GetComponent<Collider>(), this);
 
             canMove = true;
+
+            _darkAbilityIcon = GenerateDarkTexture();
         }
 
         private void Update() {
@@ -131,6 +137,9 @@ namespace PlayerCode.BaseCode {
             HandleCooldowns();
             UpdateAnimationValues();
             HandleHealthBar();
+            HandleAbilityIcon();
+
+            if (ReferenceEquals(_darkAbilityIcon, null)) _darkAbilityIcon = GenerateDarkTexture();
         }
 
         private void FixedUpdate() {
@@ -498,6 +507,60 @@ namespace PlayerCode.BaseCode {
             float value = (float) _currentHealth / maxHealth;
 
             healthBarUI.value = value;
+        }
+
+        private void HandleAbilityIcon() {
+            if (ReferenceEquals(abilityIconDisplay, null)) return;
+            Texture2D textureToUse = canUseAbility ? abilityIcon : _darkAbilityIcon;
+            
+            abilityIconDisplay.texture = textureToUse;
+        }
+
+        private Texture2D GenerateDarkTexture() {
+            if (abilityIcon == null)
+                return null;
+
+            // Make sure we can read pixels from abilityIcon
+            Texture2D readableIcon = MakeReadable(abilityIcon);
+
+            // Get the original pixels
+            Color[] pixels = readableIcon.GetPixels();
+            Color[] darkPixels = new Color[pixels.Length];
+
+            // Darken the pixels
+            for (int i = 0; i < pixels.Length; i++)
+                darkPixels[i] = pixels[i] * 0.5f; // adjust multiplier as needed
+
+            // Create a writable texture in a safe format
+            Texture2D darkTexture = new Texture2D(readableIcon.width, readableIcon.height, TextureFormat.RGBA32, false);
+            darkTexture.SetPixels(darkPixels);
+            darkTexture.Apply();
+
+            return darkTexture;
+        }
+
+        private Texture2D MakeReadable(Texture2D texture) {
+            // Create a temporary RenderTexture
+            RenderTexture tmp = RenderTexture.GetTemporary(
+                texture.width,
+                texture.height,
+                0,
+                RenderTextureFormat.Default,
+                RenderTextureReadWrite.Linear);
+
+            Graphics.Blit(texture, tmp);
+
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture.active = tmp;
+
+            Texture2D readable = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+            readable.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
+            readable.Apply();
+
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(tmp);
+
+            return readable;
         }
 
         #endregion

@@ -14,9 +14,8 @@ namespace PlayerCode.BaseCode {
         private int _isAbilityId;
         private int _isHitId;
 
-        private void Start() {
-            animator = GetComponent<Animator>();
-            if (ReferenceEquals(animator, null)) animator = GetComponentInChildren<Animator>();
+        private void Awake() {
+            animator = GetComponentInChildren<Animator>();
         }
 
         public void SetXMovementValue(float value) {

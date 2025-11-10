@@ -10,8 +10,11 @@ namespace ObjectCode.PlayerJoinObjects {
         public GameObject defaultPlayer; //temporary for testing
         public Slider healthBarPlayerOne;
         public Slider healthBarPlayerTwo;
+        public RawImage abilityIconDisplayOne;
+        public RawImage abilityIconDisplayTwo;
         public Transform spawnPositionOne;
         public Transform spawnPositionTwo;
+        public Texture2D abilityIcon;
 
         private void Start() {
             int index = 0;
@@ -28,9 +31,14 @@ namespace ObjectCode.PlayerJoinObjects {
 
                 Slider sliderToUse = healthBarPlayerOne != null ? healthBarPlayerOne : healthBarPlayerTwo;
                 healthBarPlayerOne = null;
+                
+                RawImage imageToUse = abilityIconDisplayOne != null ? abilityIconDisplayOne : abilityIconDisplayTwo;
+                abilityIconDisplayOne = null;
 
                 controller.healthBarUI = sliderToUse;
                 controller.playerId = index;
+                controller.abilityIconDisplay = imageToUse;
+                controller.abilityIcon = abilityIcon;
                 index++;
             }
         }
