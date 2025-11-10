@@ -1,10 +1,3 @@
-# Project-1-Unity-Project
+# Project 1 Unity Work
 
-# Finished
-- Nothing :/
-
-# Working On
-- Player Movement
-
-# TODO
-- Combat
+Project is done :D
