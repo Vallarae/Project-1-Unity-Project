@@ -7,12 +7,7 @@ public class MainMenuManager : MonoBehaviour
     {
         SceneManager.LoadScene(2);
     }
-
-    public void OptionsButton()
-    {
-        Debug.Log("Implement later, characters needed for implementation");
-    }
-
+    
     public void QuitButton()
     {
         Application.Quit();

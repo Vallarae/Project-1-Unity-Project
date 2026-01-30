@@ -64,9 +64,5 @@ namespace PlayerCode.Characters.Archer {
         private void Destroy() {
             Destroy(gameObject);
         }
-
-        private void onTriggerEnter(Collider other) {
-            Destroy();
-        }
     }
 }

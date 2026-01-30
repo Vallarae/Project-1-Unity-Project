@@ -412,8 +412,7 @@ namespace PlayerCode.BaseCode {
 
             isBlocking = true;
         }
-
-        //These two functions can be left empty, as they will be unique per player
+        
         protected virtual void Ability() {
             animationController.OnAbilityUse(true);
         }
@@ -519,19 +518,16 @@ namespace PlayerCode.BaseCode {
         private Texture2D GenerateDarkTexture() {
             if (abilityIcon == null)
                 return null;
-
-            // Make sure we can read pixels from abilityIcon
+            
             Texture2D readableIcon = MakeReadable(abilityIcon);
-
-            // Get the original pixels
+            
             Color[] pixels = readableIcon.GetPixels();
             Color[] darkPixels = new Color[pixels.Length];
-
-            // Darken the pixels
+            
             for (int i = 0; i < pixels.Length; i++)
-                darkPixels[i] = pixels[i] * 0.5f; // adjust multiplier as needed
+                darkPixels[i] = pixels[i] * 0.5f; 
 
-            // Create a writable texture in a safe format
+ 
             Texture2D darkTexture = new Texture2D(readableIcon.width, readableIcon.height, TextureFormat.RGBA32, false);
             darkTexture.SetPixels(darkPixels);
             darkTexture.Apply();

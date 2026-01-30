@@ -31,6 +31,7 @@ namespace PlayerCode.Characters.Archer {
         }
 
         protected override void Ability() {
+            base.Ability();
             Arrow arr;
             
             arr = Instantiate(arrow,  new(arrowSpawnerPoint.transform.position.x, arrowSpawnerPoint.transform.position.y, 0), Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));
@@ -43,18 +44,6 @@ namespace PlayerCode.Characters.Archer {
             _curHitCount = 0;
             canUseAbility = false;
         }
-
-        protected void OnDrawGizmos() {
-            // Gizmos.color = Color.red;
-            // Transform curTransform = arrowSpawnerPoint.transform;
-            // curTransform.rotation = Quaternion.Euler(0, 0, 0);
-            // Gizmos.DrawLine(curTransform.position, curTransform.position + curTransform.forward);
-            //
-            // curTransform.rotation = Quaternion.Euler(angleOffset, 0, 0);
-            // Gizmos.DrawLine(curTransform.position, curTransform.position + curTransform.forward);
-            //
-            // curTransform.rotation = Quaternion.Euler(-angleOffset, 0, 0);
-            // Gizmos.DrawLine(curTransform.position, curTransform.position + curTransform.forward);
-        }
     }
 }
+

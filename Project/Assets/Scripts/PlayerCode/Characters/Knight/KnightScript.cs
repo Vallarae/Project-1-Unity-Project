@@ -47,8 +47,6 @@ namespace PlayerCode.Characters.Knight {
                 BasePlayerController hitEnemy = Hitbox();
                 if (hitEnemy == null) return;
 
-                //COPILET STOP FUCKING WITH MY CODE I KNOW WHAT I AM DOING YOU IDIOT
-                //I'd rather use gemini's code than yours any day
                 AttackData attackData = new AttackData(abilityDamage, abilityKnockbackForce, abilityStunTime, 0f, true);
 
                 if (hitEnemy.isBlocking) return;
@@ -58,14 +56,8 @@ namespace PlayerCode.Characters.Knight {
             }
         }
 
-        // private void OnDrawGizmos()
-        // {
-        //     Gizmos.color = Color.blue;
-        //     Gizmos.DrawWireCube(transform.position + (transform.forward * abilityPositionOffset.x), abilityHitboxSize);
-        // }
-        
-        //Dash forwards that does damage and stuns enemies
         protected override void Ability() {
+            base.Ability();
             rb.AddForce(moveInput * abilityDashForce, ForceMode.Impulse);
             canUseAbility = false;
             _abilityHitCount = 0;

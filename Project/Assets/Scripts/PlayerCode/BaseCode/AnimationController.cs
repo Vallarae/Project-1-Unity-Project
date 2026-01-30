@@ -4,16 +4,6 @@ namespace PlayerCode.BaseCode {
     public class AnimationController : MonoBehaviour {
         [SerializeField] private Animator animator;
 
-        //for later optimisation
-        private int _xMovementId;
-        private int _directionMovingId;
-        private int _yVelocityId;
-        private int _isDashingId;
-        private int _attackIndexId;
-        private int _isBlockingId;
-        private int _isAbilityId;
-        private int _isHitId;
-
         private void Awake() {
             animator = GetComponentInChildren<Animator>();
         }
@@ -56,6 +46,12 @@ namespace PlayerCode.BaseCode {
         public void OnAbilityUse(bool useAbility) {
             if (ReferenceEquals(animator, null)) return;
             animator.SetBool("IsAbility", useAbility);
+            Invoke(nameof(OnAbilityFinish), 0.2f);
+        }
+
+        public void OnAbilityFinish() {
+            if (ReferenceEquals(animator, null)) return;
+            animator.SetBool("IsAbility", false);
         }
 
         public void OnPunchAttempt() {

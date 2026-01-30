@@ -10,9 +10,7 @@ namespace MenuScripts.CharacterSelectionMenu {
         public GameObject characterTwo;
 
         public static int checkedIndex = 0;
-
-        //    int index = PlayerManager.instance.players.FindIndex(player => player.device == playerInput.devices[0]);
-        //input.SwitchCurrentControlScheme(player.controlScheme, player.device);
+        
 
         private void Start() {
             PlayerInfo player = PlayerManager.instance.players[checkedIndex];
